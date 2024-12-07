@@ -1,0 +1,41 @@
+.capsule-detail {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    font-size: 2rem;
+    color: #880e4f;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: #4a148c;
+  }
+  
+  .capsule-content {
+    font-style: italic;
+    margin: 1rem 0;
+  }
+  
+  .back-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #880e4f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .back-button:hover {
+    background-color: #560027;
+    transform: scale(1.05);
+  }
+  

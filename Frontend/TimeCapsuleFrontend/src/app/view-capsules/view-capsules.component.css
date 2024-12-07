@@ -1,0 +1,65 @@
+.view-capsules {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    font-size: 2rem;
+    color: #00796b;
+  }
+  
+  p {
+    font-size: 1.2rem;
+    color: #004d40;
+  }
+  
+  .counter {
+    font-weight: bold;
+    color: #e65100;
+  }
+  
+  .capsule-list {
+    margin-top: 1.5rem;
+  }
+  
+  .capsule-item {
+    background: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+  }
+  
+  .capsule-item h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #00796b;
+  }
+  
+  .capsule-item p {
+    margin: 0.5rem 0;
+    color: #004d40;
+  }
+  
+  button {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #00796b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #004d40;
+    transform: scale(1.05);
+  }
+  

@@ -1,0 +1,23 @@
+<div class="signup-page">
+    <h1>Signup Page</h1>
+    <form (ngSubmit)="onSignup()">
+      <label for="name">Name:</label>
+      <input type="text" id="name" [(ngModel)]="signupData.name" name="name" required>
+  
+      <label for="age">Age:</label>
+      <input type="number" id="age" [(ngModel)]="signupData.age" name="age">
+  
+      <label for="email">Email:</label>
+      <input type="email" id="email" [(ngModel)]="signupData.email" name="email" required>
+  
+      <label for="password">Password:</label>
+      <input type="password" id="password" [(ngModel)]="signupData.password" name="password" required>
+  
+      <button type="submit">Signup</button>
+    </form>
+    <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  </div>
+  
+  
+  

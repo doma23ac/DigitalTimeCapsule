@@ -1,23 +1,21 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Required for *ngIf
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { Router, RouterModule } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, RouterModule], // CommonModule is mandatory for *ngIf
+  imports: [Router],  // Import RouterModule in standalone component
   template: `
     <div class="landing-page" *ngIf="isLandingPage(); else routedContent">
       <h1>Welcome to My Landing Page</h1>
       <form (ngSubmit)="onLogin()">
         <label for="email">Email:</label>
         <input type="email" id="email" [(ngModel)]="loginData.email" name="email" required>
-    
+
         <label for="password">Password:</label>
         <input type="password" id="password" [(ngModel)]="loginData.password" name="password" required>
-    
+
         <button type="submit">Login</button>
       </form>
       <button class="signup-button" (click)="navigateToSignup()">Sign Up</button>
@@ -78,17 +76,34 @@ export class AppComponent {
   loginData = { email: '', password: '' };
   errorMessage: string | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private http: HttpClient) {}
 
   onLogin() {
-    const apiUrl = 'http://localhost:3000/login'; // Replace with your backend URL
-    if (this.loginData.email === 'test@example.com' && this.loginData.password === 'password123') {
-      console.log('Login successful!');
-      alert('Login successful!');
-      this.errorMessage = null;
-    } else {
-      this.errorMessage = 'Invalid email or password';
-    }
+    const email = this.loginData.email;
+    const password = this.loginData.password;
+
+    const basicAuthHeader = 'Basic ' + btoa(`${email}:${password}`);
+    const apiUrl = 'http://localhost:5062/api/login';  // Backend API URL
+    const headers = new HttpHeaders().set('Authorization', basicAuthHeader);
+
+    // No need for 'responseType: text', default responseType is JSON
+    this.http.post<any>(apiUrl, {}, { headers }).subscribe({
+      next: (response) => {
+        console.log('Login successful! Response:', response);  // Log the JSON response
+
+        // Check for the 'message' in the JSON response
+        if (response && response.message === 'Login successful') {
+          console.log('Redirecting to /personal');
+          this.router.navigate(['/personal']);  // Redirect to personal page on successful login
+        } else {
+          this.errorMessage = 'Unexpected response: ' + (response?.message || 'Unknown error');
+        }
+      },
+      error: (err) => {
+        console.error('Login failed', err);
+        this.errorMessage = 'Invalid email or password';  // Handle error
+      }
+    });
   }
 
   navigateToSignup() {

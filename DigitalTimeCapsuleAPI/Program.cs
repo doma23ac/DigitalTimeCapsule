@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,22 +22,22 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader());
+        policy.AllowAnyOrigin()   // Allow any origin
+              .AllowAnyMethod()   // Allow any HTTP method (GET, POST, etc.)
+              .AllowAnyHeader()); // Allow any headers
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Enable CORS before other middleware
+app.UseCors("AllowAll"); // This enables CORS globally
+
+// Enable Swagger UI
 app.UseSwagger();
 app.UseSwaggerUI();
 
 // Enable HTTPS redirection
 app.UseHttpsRedirection();
-
-// Enable CORS
-app.UseCors("AllowAll");
 
 // Enable Authorization middleware
 app.UseAuthorization();
@@ -47,4 +46,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

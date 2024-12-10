@@ -41,3 +41,4 @@
 /Users/AppliedProgramming/TimeCapsule/DigitalTimeCapsuleAPI/obj/Debug/net8.0/DigitalTimeCapsuleAPI.pdb
 /Users/AppliedProgramming/TimeCapsule/DigitalTimeCapsuleAPI/obj/Debug/net8.0/DigitalTimeCapsuleAPI.genruntimeconfig.cache
 /Users/AppliedProgramming/TimeCapsule/DigitalTimeCapsuleAPI/obj/Debug/net8.0/ref/DigitalTimeCapsuleAPI.dll
+/Users/AppliedProgramming/TimeCapsule/DigitalTimeCapsuleAPI/obj/Debug/net8.0/DigitalTimeCapsuleAPI.sourcelink.json

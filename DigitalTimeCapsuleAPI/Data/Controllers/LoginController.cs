@@ -1,6 +1,5 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
- // Adjust the namespace as needed
 
 namespace DigitalTimeCapsuleAPI.Controllers
 {
@@ -10,46 +9,17 @@ namespace DigitalTimeCapsuleAPI.Controllers
     {
         private readonly UserRepository _userRepository;
 
-        // Inject UserRepository to access user data from the database
         public LoginController(UserRepository userRepository)
         {
             _userRepository = userRepository;
         }
 
-        // POST api/login
         [HttpPost]
         public IActionResult Login([FromHeader] string authorization)
         {
-            if (string.IsNullOrEmpty(authorization))
+            if (string.IsNullOrEmpty(authorization) || !authorization.StartsWith("Basic "))
             {
-                return Unauthorized(new { message = "Authorization Header not provided" });
-            }
-
-            var credentials = ValidateBasicAuth(authorization);
-
-            if (credentials.IsValid)
-            {
-                // Query the database to find the user by username
-                var user = _userRepository.GetAllUsers().FirstOrDefault(u => u.Username == credentials.Username);
-
-                // Check if user exists and if the password matches in plain text
-                if (user != null && user.Password == credentials.Password)
-                {
-                    // Return userId along with success message
-                    return Ok(new { message = "Login successful", userId = user.UserID });
-                }
-
-                return Unauthorized(new { message = "Invalid credentials" });
-            }
-
-            return Unauthorized(new { message = "Invalid authentication format" });
-        }
-
-        private (bool IsValid, string Username, string Password) ValidateBasicAuth(string authorization)
-        {
-            if (!authorization.StartsWith("Basic ", StringComparison.OrdinalIgnoreCase))
-            {
-                return (false, null, null);
+                return Unauthorized(new { message = "Authorization Header not provided or invalid" });
             }
 
             var encodedCredentials = authorization.Substring("Basic ".Length).Trim();
@@ -58,13 +28,26 @@ namespace DigitalTimeCapsuleAPI.Controllers
 
             if (parts.Length != 2)
             {
-                return (false, null, null);
+                return Unauthorized(new { message = "Invalid authentication format" });
             }
 
             var username = parts[0];
             var password = parts[1];
 
-            return (true, username, password);  // Return the username and password
+            var user = _userRepository.GetAllUsers().FirstOrDefault(u => u.Username == username);
+
+            if (user != null && user.Password == password)
+            {
+                return Ok(new
+                {
+                    message = "Login successful",
+                    userId = user.UserID,
+                    username = user.Username,
+                    email = user.Email
+                });
+            }
+
+            return Unauthorized(new { message = "Invalid credentials" });
         }
     }
 }

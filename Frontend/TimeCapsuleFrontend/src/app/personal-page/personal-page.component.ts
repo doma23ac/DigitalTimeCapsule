@@ -1,23 +1,33 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-personal-page',
   standalone: true,
   templateUrl: './personal-page.component.html',
-  styleUrls: ['./personal-page.component.css'],
-  imports: [CommonModule, FormsModule, RouterModule]
+  styleUrls: ['./personal-page.component.css']
 })
-export class PersonalPageComponent {
-  createNewCapsule() {
-    // Logic to create a new capsule
-    console.log('Create a new capsule button clicked');
+export class PersonalPageComponent implements OnInit {
+  user: any;
+
+  constructor(private userService: UserService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.user = this.userService.getUser();
   }
 
-  viewCapsules() {
-    // Logic to view available capsules
-    console.log('View available capsules button clicked');
+  logout(): void {
+    this.userService.clearUser();
+    this.router.navigate(['/']); // Redirect to home
+  }
+
+  createNewCapsule(): void {
+    this.router.navigate(['/create-capsule']); // Navigate to create capsule page
+  }
+
+  viewCapsules(): void {
+    this.router.navigate(['/view-capsules']); // Navigate to view capsules page
   }
 }
+

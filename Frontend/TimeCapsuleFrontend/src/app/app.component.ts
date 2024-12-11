@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [Router],  // Import RouterModule in standalone component
+  imports: [RouterModule, FormsModule],  // Import RouterModule in standalone component
   template: `
     <div class="landing-page" *ngIf="isLandingPage(); else routedContent">
       <h1>Welcome to My Landing Page</h1>

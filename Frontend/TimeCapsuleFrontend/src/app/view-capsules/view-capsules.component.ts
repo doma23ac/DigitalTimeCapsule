@@ -13,6 +13,12 @@ export interface Capsule {
   recipientID: number | null;
   senderUsername?: string;
   recipientUsername?: string;
+  tags?: Tag[]; // Add tags property to Capsule
+}
+
+export interface Tag {
+  tagID: number;
+  tagName: string;
 }
 
 @Component({
@@ -52,10 +58,28 @@ export class ViewCapsulesComponent implements OnInit {
             new Date(capsule.lockDate) <= today &&
             capsule.status !== 'opened'
         );
+
+        // Fetch tags for each capsule
+        this.capsules.forEach((capsule) => {
+          this.fetchTagsForCapsule(capsule);
+        });
       },
       error: (err) => {
         console.error('Error fetching capsules:', err);
         this.error = 'Failed to load capsules.';
+      },
+    });
+  }
+
+  fetchTagsForCapsule(capsule: Capsule) {
+    const tagsApiUrl = `http://localhost:5062/api/capsuletags/${capsule.capsuleID}`; // Replace with actual endpoint
+    this.http.get<Tag[]>(tagsApiUrl).subscribe({
+      next: (tags) => {
+        capsule.tags = tags;
+      },
+      error: (err) => {
+        console.error(`Error fetching tags for capsule ${capsule.capsuleID}:`, err);
+        capsule.tags = []; // Fallback to an empty array
       },
     });
   }
@@ -70,6 +94,5 @@ export class ViewCapsulesComponent implements OnInit {
     this.expandedCapsuleID = null; // Collapse after marking as opened
   }
 }
-
 
 

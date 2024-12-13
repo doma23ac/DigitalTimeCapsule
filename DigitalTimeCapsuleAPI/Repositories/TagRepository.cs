@@ -1,8 +1,4 @@
 using Npgsql;
-using Microsoft.Extensions.Configuration;
-
-using System;
-using System.Collections.Generic;
 
 public class TagRepository : BaseRepository
 {
@@ -46,6 +42,30 @@ public class TagRepository : BaseRepository
         return tags;
     }
 
+    public List<Tag> GetTagsByCapsuleId(int capsuleId)
+    {
+        var tags = new List<Tag>();
+        using var conn = new NpgsqlConnection(ConnectionString);
+        var cmd = conn.CreateCommand();
+        cmd.CommandText = @"
+            SELECT t.TagID, t.TagName
+            FROM CapsuleTags ct
+            INNER JOIN Tags t ON ct.TagID = t.TagID
+            WHERE ct.CapsuleID = @capsuleId";
+        cmd.Parameters.AddWithValue("@capsuleId", capsuleId);
+
+        var reader = GetData(conn, cmd);
+        while (reader.Read())
+        {
+            tags.Add(new Tag
+            {
+                TagID = (int)reader["TagID"],
+                TagName = reader["TagName"].ToString()
+            });
+        }
+        return tags;
+    }
+
     public bool InsertTag(Tag tag)
     {
         using var conn = new NpgsqlConnection(ConnectionString);
@@ -76,4 +96,27 @@ public class TagRepository : BaseRepository
 
         return ExecuteCommand(conn, cmd);
     }
+
+    public bool AddTagToCapsule(int capsuleId, int tagId)
+    {
+        using var conn = new NpgsqlConnection(ConnectionString);
+        var cmd = conn.CreateCommand();
+        cmd.CommandText = "INSERT INTO CapsuleTags (CapsuleID, TagID) VALUES (@capsuleId, @tagId)";
+        cmd.Parameters.AddWithValue("@capsuleId", capsuleId);
+        cmd.Parameters.AddWithValue("@tagId", tagId);
+
+        return ExecuteCommand(conn, cmd);
+    }
+
+    public bool RemoveTagFromCapsule(int capsuleId, int tagId)
+    {
+        using var conn = new NpgsqlConnection(ConnectionString);
+        var cmd = conn.CreateCommand();
+        cmd.CommandText = "DELETE FROM CapsuleTags WHERE CapsuleID = @capsuleId AND TagID = @tagId";
+        cmd.Parameters.AddWithValue("@capsuleId", capsuleId);
+        cmd.Parameters.AddWithValue("@tagId", tagId);
+
+        return ExecuteCommand(conn, cmd);
+    }
 }
+

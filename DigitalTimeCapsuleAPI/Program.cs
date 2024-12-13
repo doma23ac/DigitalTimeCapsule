@@ -13,6 +13,8 @@ builder.Services.AddDbContext<DigitalTimeCapsuleContext>(options =>
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<CapsuleRepository>();
 builder.Services.AddScoped<TagRepository>();
+builder.Services.AddScoped<CapsuleTagRepository>(); // Add this line
+
 
 // Add Swagger for API documentation
 builder.Services.AddEndpointsApiExplorer();

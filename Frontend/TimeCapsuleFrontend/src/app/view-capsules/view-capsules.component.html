@@ -1,24 +1,29 @@
-<div class="view-capsules">
-    <h1>Here Are Your Capsules</h1>
-  
-    <div *ngIf="error" class="error">
-      {{ error }}
-    </div>
-  
-    <div *ngIf="capsules.length > 0" class="capsule-list">
-      <div *ngFor="let capsule of capsules" class="capsule-item">
-        <h3>{{ capsule.title }}</h3>
-        <p>Message: {{ capsule.message }}</p>
-        <p>Lock Date: {{ capsule.lockDate | date }}</p>
-        <p>Status: {{ capsule.status }}</p>
-        <p>Sender ID: {{ capsule.senderID }}</p>
-        <p *ngIf="capsule.recipientID">Recipient ID: {{ capsule.recipientID }}</p>
-      </div>
-    </div>
-  
-    <div *ngIf="capsules.length === 0 && !error" class="no-capsules">
-      <p>No capsules available.</p>
-    </div>
+<div>
+  <h1>Capsules Ready to Open</h1>
+  <p *ngIf="error" class="error">{{ error }}</p>
+
+  <div *ngIf="!error && capsules.length === 0">
+    <p>No capsules are ready to open at this time.</p>
   </div>
+
+  <ul *ngIf="capsules.length > 0">
+    <li *ngFor="let capsule of capsules" class="capsule-item">
+      <div>
+        <strong>Title:</strong> {{ capsule.title }}<br />
+        <strong>Sender:</strong> {{ capsule.senderUsername }}<br />
+        <strong>Lock Date:</strong> {{ capsule.lockDate | date }}
+      </div>
+      <button (click)="toggleCapsuleMessage(capsule.capsuleID)">
+        {{ expandedCapsuleID === capsule.capsuleID ? 'Hide Message' : 'Show Message' }}
+      </button>
+      <div *ngIf="expandedCapsuleID === capsule.capsuleID" class="capsule-message">
+        <p><strong>Message:</strong> {{ capsule.message }}</p>
+        <button (click)="markCapsuleAsOpened(capsule)">Mark as Opened</button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+
   
   

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 
-
 [ApiController]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
@@ -12,17 +11,8 @@ public class UsersController : ControllerBase
         _userRepository = userRepository;
     }
 
-    // GET: api/Users
-    [HttpGet]
-    public IActionResult GetAllUsers()
-    {
-        var users = _userRepository.GetAllUsers();
-        return Ok(users);
-    }
-
-    // GET: api/Users/{id}
     [HttpGet("{id}")]
-    public IActionResult GetUser(int id)
+    public IActionResult GetUserById(int id)
     {
         var user = _userRepository.GetUserById(id);
         if (user == null)
@@ -32,25 +22,6 @@ public class UsersController : ControllerBase
         return Ok(user);
     }
 
-    // POST: api/Users
-    [HttpPost]
-    public IActionResult CreateUser([FromBody] User user)
-    {
-        if (user == null)
-        {
-            return BadRequest("User data is invalid.");
-        }
-
-        bool result = _userRepository.InsertUser(user);
-        if (result)
-        {
-            return CreatedAtAction(nameof(GetUser), new { id = user.UserID }, user);
-        }
-
-        return BadRequest("Failed to create user.");
-    }
-
-    // PUT: api/Users/{id}
     [HttpPut("{id}")]
     public IActionResult UpdateUser(int id, [FromBody] User user)
     {
@@ -70,11 +41,9 @@ public class UsersController : ControllerBase
         {
             return NoContent();
         }
-
         return BadRequest("Failed to update user.");
     }
 
-    // DELETE: api/Users/{id}
     [HttpDelete("{id}")]
     public IActionResult DeleteUser(int id)
     {
@@ -89,7 +58,7 @@ public class UsersController : ControllerBase
         {
             return NoContent();
         }
-
         return BadRequest("Failed to delete user.");
     }
 }
+

@@ -1,3 +1,5 @@
+using System;
+
 public class Capsule
 {
     public int CapsuleID { get; set; }
@@ -8,6 +10,8 @@ public class Capsule
     public int SenderID { get; set; }
     public int? RecipientID { get; set; }
 
-    public User Sender { get; set; }
-    public User Recipient { get; set; }
+    // Transient properties for username resolution
+    public string SenderUsername { get; set; }
+    public string RecipientUsername { get; set; }
 }
+

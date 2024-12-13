@@ -1,6 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { CapsuleService, Capsule } from '../capsule.service';
+import { HttpClient } from '@angular/common/http';
+import { UserService } from '../user.service';
 import { CommonModule } from '@angular/common';
+
+export interface Capsule {
+  capsuleID: number;
+  title: string;
+  message: string;
+  lockDate: string;
+  status: string;
+  senderID: number;
+  recipientID: number | null;
+  senderUsername?: string;
+  recipientUsername?: string;
+}
+
 @Component({
   selector: 'app-view-capsules',
   standalone: true,
@@ -11,17 +25,33 @@ import { CommonModule } from '@angular/common';
 export class ViewCapsulesComponent implements OnInit {
   capsules: Capsule[] = [];
   error: string | null = null;
+  userID: number | null = null;
+  expandedCapsuleID: number | null = null; // To track expanded capsule
 
-  constructor(private capsuleService: CapsuleService) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   ngOnInit() {
-    this.fetchCapsules();
+    const user = this.userService.getUser();
+    if (user && user.userId) {
+      this.userID = user.userId;
+      this.fetchCapsules();
+    } else {
+      this.error = 'User not logged in.';
+    }
   }
 
   fetchCapsules() {
-    this.capsuleService.getAllCapsules().subscribe({
+    const apiUrl = 'http://localhost:5062/api/capsules'; // Replace with your actual endpoint
+    this.http.get<Capsule[]>(apiUrl).subscribe({
       next: (data) => {
-        this.capsules = data;
+        const today = new Date();
+        // Filter capsules where RecipientID matches and LockDate is today or earlier
+        this.capsules = data.filter(
+          (capsule) =>
+            capsule.recipientID === this.userID &&
+            new Date(capsule.lockDate) <= today &&
+            capsule.status !== 'opened'
+        );
       },
       error: (err) => {
         console.error('Error fetching capsules:', err);
@@ -30,14 +60,16 @@ export class ViewCapsulesComponent implements OnInit {
     });
   }
 
-  viewCapsule(capsule: Capsule) {
-    console.log(`Viewing capsule with ID: ${capsule.capsuleID}`);
-    // Example: Navigate to detail view
+  toggleCapsuleMessage(capsuleID: number) {
+    // Toggle the expanded state
+    this.expandedCapsuleID = this.expandedCapsuleID === capsuleID ? null : capsuleID;
   }
 
-  get unopenedCapsules(): number {
-    return this.capsules.filter((capsule) => capsule.status !== 'opened').length;
+  markCapsuleAsOpened(capsule: Capsule) {
+    capsule.status = 'opened';
+    this.expandedCapsuleID = null; // Collapse after marking as opened
   }
 }
+
 
 

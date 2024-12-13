@@ -1,29 +1,58 @@
 using Microsoft.AspNetCore.Mvc;
-
-using System.Collections.Generic;
+using System;
 
 [ApiController]
 [Route("api/[controller]")]
 public class CapsulesController : ControllerBase
 {
     private readonly CapsuleRepository _capsuleRepository;
+    private readonly UserRepository _userRepository;
 
-    public CapsulesController(CapsuleRepository capsuleRepository)
+    public CapsulesController(CapsuleRepository capsuleRepository, UserRepository userRepository)
     {
         _capsuleRepository = capsuleRepository;
+        _userRepository = userRepository;
     }
 
-    // GET: api/Capsules
-    [HttpGet]
-    public IActionResult GetAllCapsules()
+    [HttpPost]
+    public IActionResult CreateCapsule([FromBody] Capsule capsule)
     {
-        var capsules = _capsuleRepository.GetAllCapsules();
-        return Ok(capsules);
+        if (capsule == null || string.IsNullOrEmpty(capsule.SenderUsername))
+        {
+            return BadRequest("Invalid capsule data.");
+        }
+
+        // Resolve SenderID
+        var sender = _userRepository.GetUserByUsername(capsule.SenderUsername);
+        if (sender == null)
+        {
+            return NotFound($"Sender username '{capsule.SenderUsername}' not found.");
+        }
+        capsule.SenderID = sender.UserID;
+
+        // Resolve RecipientID (optional)
+        if (!string.IsNullOrEmpty(capsule.RecipientUsername))
+        {
+            var recipient = _userRepository.GetUserByUsername(capsule.RecipientUsername);
+            if (recipient == null)
+            {
+                return NotFound($"Recipient username '{capsule.RecipientUsername}' not found.");
+            }
+            capsule.RecipientID = recipient.UserID;
+        }
+
+        // Save capsule
+        bool result = _capsuleRepository.InsertCapsule(capsule);
+        if (result)
+        {
+            return CreatedAtAction(nameof(CreateCapsule), new { id = capsule.CapsuleID }, capsule);
+        }
+
+        return BadRequest("Failed to create capsule.");
     }
 
-    // GET: api/Capsules/{id}
     [HttpGet("{id}")]
-    public IActionResult GetCapsule(int id)
+    public IActionResult GetCapsuleById(int id)
     {
         var capsule = _capsuleRepository.GetCapsuleById(id);
         if (capsule == null)
@@ -33,25 +62,13 @@ public class CapsulesController : ControllerBase
         return Ok(capsule);
     }
 
-    // POST: api/Capsules
-    [HttpPost]
-    public IActionResult CreateCapsule([FromBody] Capsule capsule)
+    [HttpGet]
+    public IActionResult GetAllCapsules()
     {
-        if (capsule == null)
-        {
-            return BadRequest("Capsule data is invalid.");
-        }
-
-        bool result = _capsuleRepository.InsertCapsule(capsule);
-        if (result)
-        {
-            return CreatedAtAction(nameof(GetCapsule), new { id = capsule.CapsuleID }, capsule);
-        }
-
-        return BadRequest("Failed to create capsule.");
+        var capsules = _capsuleRepository.GetAllCapsules();
+        return Ok(capsules);
     }
 
-    // PUT: api/Capsules/{id}
     [HttpPut("{id}")]
     public IActionResult UpdateCapsule(int id, [FromBody] Capsule capsule)
     {
@@ -66,6 +83,7 @@ public class CapsulesController : ControllerBase
             return NotFound($"Capsule with ID {id} not found.");
         }
 
+        // Update logic
         bool result = _capsuleRepository.UpdateCapsule(capsule);
         if (result)
         {
@@ -75,7 +93,6 @@ public class CapsulesController : ControllerBase
         return BadRequest("Failed to update capsule.");
     }
 
-    // DELETE: api/Capsules/{id}
     [HttpDelete("{id}")]
     public IActionResult DeleteCapsule(int id)
     {

@@ -1,39 +1,50 @@
 <form (ngSubmit)="onSubmit()" #capsuleForm="ngForm">
+  <div>
+    <h1>Create Capsule</h1>
+    <p>Welcome, {{ userName }}!</p>
     <div class="form-group">
-      <label for="text">Your Message</label>
+      <label for="title">Title</label>
+      <input
+        id="title"
+        [(ngModel)]="capsule.title"
+        name="title"
+        required
+        placeholder="Enter capsule title"
+      />
+    </div>
+    <div class="form-group">
+      <label for="message">Your Message</label>
       <textarea
-        id="text"
-        [(ngModel)]="capsule.text"
-        name="text"
+        id="message"
+        [(ngModel)]="capsule.message"
+        name="message"
         required
         rows="4"
         placeholder="Write your message here..."
       ></textarea>
     </div>
     <div class="form-group">
-      <label for="date">Date to Open</label>
+      <label for="lockDate">Date to Open</label>
       <input
         type="date"
-        id="date"
-        [(ngModel)]="capsule.date"
-        name="date"
+        id="lockDate"
+        [(ngModel)]="capsule.lockDate"
+        name="lockDate"
         required
       />
     </div>
     <div class="form-group">
-      <label for="receiver">Receiver</label>
+      <label for="recipientUsername">Receiver</label>
       <input
-        type="text"
-        id="receiver"
-        [(ngModel)]="capsule.receiver"
-        name="receiver"
+        id="recipientUsername"
+        [(ngModel)]="capsule.recipientUsername"
+        name="recipientUsername"
         required
-        placeholder="Who will receive this?"
+        placeholder="Enter recipient username"
       />
     </div>
-    <div class="actions">
-      <button type="button" (click)="goBack()" class="back-button">Go Back</button>
-      <button type="submit" [disabled]="!capsuleForm.form.valid" class="submit-button">Submit</button>
-    </div>
-  </form>
-  
+    <button type="submit">Create Capsule</button>
+    <button type="button" (click)="goBack()">Go Back</button>
+  </div>
+</form>
+

@@ -22,18 +22,24 @@ export class AppComponent {
     const basicAuthHeader = 'Basic ' + btoa(`${this.loginData.email}:${this.loginData.password}`);
     const apiUrl = 'http://localhost:5062/api/login';
     const headers = new HttpHeaders().set('Authorization', basicAuthHeader);
-
+  
+    // Store the header in local storage
+    localStorage.setItem('authHeader', basicAuthHeader);
+  
     this.http.post<any>(apiUrl, {}, { headers }).subscribe({
       next: (response) => {
         if (response.message === 'Login successful') {
           this.userService.setUser(response);
+          // Store the user information in local storage
+          localStorage.setItem('user', JSON.stringify(response));
+          console.log('Stored user in localStorage:', localStorage.getItem('user')); // Print the stored user
           this.router.navigate(['/personal']);
         } else {
           this.errorMessage = 'Unexpected response';
         }
       },
-      error: () => {
-        this.errorMessage = 'Invalid email or password';
+      error: (error) => {
+        this.errorMessage = 'Login failed';
       }
     });
   }

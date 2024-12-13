@@ -31,11 +31,10 @@ namespace DigitalTimeCapsuleAPI.Controllers
                 return Unauthorized(new { message = "Invalid authentication format" });
             }
 
-            var username = parts[0];
+            var email = parts[0];
             var password = parts[1];
 
-            var user = _userRepository.GetAllUsers().FirstOrDefault(u => u.Username == username);
-
+            var user = _userRepository.GetUserByEmail(email);
             if (user != null && user.Password == password)
             {
                 return Ok(new
@@ -51,3 +50,4 @@ namespace DigitalTimeCapsuleAPI.Controllers
         }
     }
 }
+

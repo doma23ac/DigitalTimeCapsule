@@ -33,37 +33,43 @@ public class CapsuleRepository : BaseRepository
     }
 
     public bool InsertCapsule(Capsule capsule)
-    {
-        using var conn = new NpgsqlConnection(ConnectionString);
-        var cmd = conn.CreateCommand();
-        cmd.CommandText = @"
-           
-    INSERT INTO ""Capsules"" (
-        ""Title"", 
-        ""Message"", 
-        ""LockDate"", 
-        ""Status"", 
-        ""SenderId"", 
-        ""RecipientID""
-    ) 
-    VALUES (
-        @title, 
-        @message, 
-        @lockDate, 
-        @status, 
-        @senderID, 
-        @recipientID
-    )";
+{
+    using var conn = new NpgsqlConnection(ConnectionString);
+    conn.Open();
 
-        cmd.Parameters.AddWithValue("@title", capsule.Title ?? string.Empty);
-        cmd.Parameters.AddWithValue("@message", capsule.Message ?? string.Empty);
-        cmd.Parameters.AddWithValue("@lockDate", capsule.LockDate);
-        cmd.Parameters.AddWithValue("@status", capsule.Status ?? string.Empty);
-        cmd.Parameters.AddWithValue("@senderID", capsule.SenderID);
-        cmd.Parameters.AddWithValue("@recipientID", (object?)capsule.RecipientID ?? DBNull.Value);
+    var cmd = conn.CreateCommand();
+    cmd.CommandText = @"
+        INSERT INTO ""Capsules"" (
+            ""Title"", 
+            ""Message"", 
+            ""LockDate"", 
+            ""Status"", 
+            ""SenderId"", 
+            ""RecipientID""
+        ) 
+        VALUES (
+            @title, 
+            @message, 
+            @lockDate, 
+            @status, 
+            @senderID, 
+            @recipientID
+        )
+        RETURNING ""CapsuleID"";"; // Return the CapsuleID of the newly inserted row
 
-        return ExecuteCommand(conn, cmd);
-    }
+    cmd.Parameters.AddWithValue("@title", capsule.Title ?? string.Empty);
+    cmd.Parameters.AddWithValue("@message", capsule.Message ?? string.Empty);
+    cmd.Parameters.AddWithValue("@lockDate", capsule.LockDate);
+    cmd.Parameters.AddWithValue("@status", capsule.Status ?? string.Empty);
+    cmd.Parameters.AddWithValue("@senderID", capsule.SenderID);
+    cmd.Parameters.AddWithValue("@recipientID", (object?)capsule.RecipientID ?? DBNull.Value);
+
+    // Retrieve the CapsuleID and set it to the capsule object
+    capsule.CapsuleID = (int)cmd.ExecuteScalar();
+
+    return true;
+}
+
 
     public bool UpdateCapsule(Capsule capsule)
     {

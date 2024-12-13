@@ -5,6 +5,11 @@ import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { UserService } from '../user.service';
 
+export interface Tag {
+  tagID: number;
+  tagName: string;
+}
+
 @Component({
   selector: 'app-create-capsule',
   standalone: true,
@@ -21,7 +26,10 @@ export class CreateCapsuleComponent implements OnInit {
     senderUsername: '',
     recipientUsername: ''
   };
+
   userName: string | null = null;
+  availableTags: Tag[] = []; // Store available tags
+  selectedTagIDs: number[] = []; // Store selected tag IDs
 
   constructor(
     private http: HttpClient,
@@ -30,7 +38,6 @@ export class CreateCapsuleComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Retrieve the currently logged-in user from the UserService
     const user = this.userService.getUser();
     if (user && user.username) {
       this.userName = user.username; // Set the user's name
@@ -38,24 +45,55 @@ export class CreateCapsuleComponent implements OnInit {
     } else {
       console.warn('User is not logged in or username is missing.');
     }
+
+    this.fetchAvailableTags();
+  }
+
+  fetchAvailableTags(): void {
+    const tagsApiUrl = 'http://localhost:5062/api/tags'; // Replace with your endpoint
+    this.http.get<Tag[]>(tagsApiUrl).subscribe({
+      next: (data) => {
+        this.availableTags = data;
+      },
+      error: (err) => {
+        console.error('Error fetching tags:', err);
+      }
+    });
+  }
+
+  onTagSelection(tagID: number): void {
+    if (this.selectedTagIDs.includes(tagID)) {
+      // Remove the tag if it's already selected
+      this.selectedTagIDs = this.selectedTagIDs.filter((id) => id !== tagID);
+    } else {
+      // Add the tag if it's not selected
+      this.selectedTagIDs.push(tagID);
+    }
   }
 
   onSubmit(): void {
-    const apiUrl = 'http://localhost:5062/api/capsules';
+    const apiUrl = 'http://localhost:5062/api/capsules'; // Capsule creation endpoint
   
-    // Log the capsule data for debugging
-    console.log('Submitting capsule:', this.capsule);
-  
+    // Step 1: Create the capsule
     this.http.post<any>(apiUrl, this.capsule).subscribe({
       next: (response) => {
         console.log('Capsule created successfully:', response);
-        alert('Capsule created successfully!');
-        this.resetForm();
+  
+        if (response.capsuleID) {
+          const capsuleID = response.capsuleID;
+  
+          // Step 2: Associate tags with the created capsule
+          this.addTagsToCapsule(capsuleID);
+          alert('Capsule created successfully!');
+          this.resetForm();
+        } else {
+          console.error('CapsuleID is missing in the response.');
+          alert('Failed to retrieve Capsule ID from the server.');
+        }
       },
       error: (error) => {
         console.error('Error creating capsule:', error);
   
-        // Handle specific backend error messages
         if (error.status === 400) {
           alert('Invalid capsule data. Please check all fields and try again.');
         } else if (error.status === 404) {
@@ -66,13 +104,26 @@ export class CreateCapsuleComponent implements OnInit {
       },
     });
   }
-  
+
+  addTagsToCapsule(capsuleID: number): void {
+    const capsuleTagsApiUrl = 'http://localhost:5062/api/capsuletags'; // Capsule tags endpoint
+
+    this.selectedTagIDs.forEach((tagID) => {
+      this.http.post(`${capsuleTagsApiUrl}/${capsuleID}/${tagID}`, {}).subscribe({
+        next: () => {
+          console.log(`Tag with ID ${tagID} added to Capsule with ID ${capsuleID}`);
+        },
+        error: (err) => {
+          console.error(`Error adding tag to capsule:`, err);
+        },
+      });
+    });
+  }
 
   goBack(): void {
     this.location.back();
   }
 
-  // Reset the form fields
   resetForm(): void {
     this.capsule = {
       title: '',
@@ -82,6 +133,8 @@ export class CreateCapsuleComponent implements OnInit {
       senderUsername: this.userName || '', // Keep the senderUsername intact
       recipientUsername: ''
     };
+    this.selectedTagIDs = []; // Reset selected tags
   }
 }
+
 

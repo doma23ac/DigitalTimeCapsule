@@ -43,6 +43,23 @@
         placeholder="Enter recipient username"
       />
     </div>
+
+    <!-- New Section for Tag Selection -->
+    <div class="form-group">
+      <label>Select Tags</label>
+      <div class="tags-container">
+        <div *ngFor="let tag of availableTags" class="tag">
+          <input
+            type="checkbox"
+            [id]="'tag-' + tag.tagID"
+            [value]="tag.tagID"
+            (change)="onTagSelection(tag.tagID)"
+          />
+          <label [for]="'tag-' + tag.tagID">{{ tag.tagName }}</label>
+        </div>
+      </div>
+    </div>
+
     <button type="submit">Create Capsule</button>
     <button type="button" (click)="goBack()">Go Back</button>
   </div>

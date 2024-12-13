@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -43,9 +42,11 @@ public class CapsulesController : ControllerBase
 
         // Save capsule
         bool result = _capsuleRepository.InsertCapsule(capsule);
-        if (result)
+
+        if (result && capsule.CapsuleID > 0)
         {
-            return CreatedAtAction(nameof(CreateCapsule), new { id = capsule.CapsuleID }, capsule);
+            // Return the created capsule with its ID
+            return CreatedAtAction(nameof(GetCapsuleById), new { id = capsule.CapsuleID }, capsule);
         }
 
         return BadRequest("Failed to create capsule.");
@@ -83,7 +84,6 @@ public class CapsulesController : ControllerBase
             return NotFound($"Capsule with ID {id} not found.");
         }
 
-        // Update logic
         bool result = _capsuleRepository.UpdateCapsule(capsule);
         if (result)
         {

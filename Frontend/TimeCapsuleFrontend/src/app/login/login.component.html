@@ -1,23 +1,24 @@
-<div class="login-form">
-    <h2>Login</h2>
+<div class="welcome-message-container">
+    <h1 class="welcome-message">Welcome to the Digital Time Capsule!</h1>
+  </div>
+  
+  <div class="login-form">
     <form (ngSubmit)="onLogin()">
-      <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input matInput type="email" [(ngModel)]="loginData.email" name="email" required />
+      <mat-form-field class="input-field">
+        <input matInput type="email" [(ngModel)]="loginData.email" name="email" required placeholder="Email" />
       </mat-form-field>
   
-      <mat-form-field>
-        <mat-label>Password</mat-label>
-        <input matInput type="password" [(ngModel)]="loginData.password" name="password" required />
+      <mat-form-field class="input-field">
+        <input matInput type="password" [(ngModel)]="loginData.password" name="password" required placeholder="Password" />
       </mat-form-field>
   
-      <button mat-raised-button color="primary" type="submit">Login</button>
+      <button mat-raised-button color="primary" type="submit" class="login-button">Login</button>
     </form>
   
-    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
-  
-    <button mat-button (click)="navigateToSignup()">Sign Up</button>
+    <button mat-button (click)="navigateToSignup()" class="signup-button">Sign Up</button>
   </div>
+  
+  
   
   
   

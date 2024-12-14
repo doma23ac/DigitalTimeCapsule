@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../user.service';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button'; // For mat-raised-button
+import { MatCardModule } from '@angular/material/card'; // For mat-card
+import { MatIconModule } from '@angular/material/icon'; // For mat-icon
+import { MatChipsModule } from '@angular/material/chips'; // For displaying tags as chips
 
 export interface Capsule {
   capsuleID: number;
@@ -13,7 +17,7 @@ export interface Capsule {
   recipientID: number | null;
   senderUsername?: string;
   recipientUsername?: string;
-  tags?: Tag[]; // Add tags property to Capsule
+  tags?: Tag[];
 }
 
 export interface Tag {
@@ -24,9 +28,15 @@ export interface Tag {
 @Component({
   selector: 'app-view-capsules',
   standalone: true,
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatChipsModule
+  ],  // Importing necessary Material modules here
   templateUrl: './view-capsules.component.html',
   styleUrls: ['./view-capsules.component.css'],
-  imports: [CommonModule],
 })
 export class ViewCapsulesComponent implements OnInit {
   capsules: Capsule[] = [];
@@ -94,5 +104,3 @@ export class ViewCapsulesComponent implements OnInit {
     this.expandedCapsuleID = null; // Collapse after marking as opened
   }
 }
-
-

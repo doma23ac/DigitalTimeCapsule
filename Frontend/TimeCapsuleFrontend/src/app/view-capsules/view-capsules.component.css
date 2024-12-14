@@ -1,19 +1,16 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-}
-
+/* Styling for the capsules container */
 .capsules-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 2rem auto;
   padding: 1.5rem;
-  background-color: #ffffff;
+  background-color: rgba(169, 169, 169, 0.6); /* Semi-transparent grey */
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
   overflow: hidden;
 }
 
+
+/* Header styling */
 .header {
   font-size: 1.8rem;
   margin-bottom: 1rem;
@@ -21,71 +18,94 @@ body {
   color: #333;
 }
 
+/* Error message styling */
 .error {
   color: red;
   text-align: center;
 }
 
+/* No capsules available message */
 .no-capsules {
   text-align: center;
   font-size: 1rem;
   color: #666;
 }
 
+/* Capsules list layout */
 .capsules-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap */
+  gap: 20px; /* Space between the capsules */
+  justify-content: center; /* Center the items */
 }
 
+/* Capsule card styling */
+/* Capsule card styling */
 .capsule-item {
-  margin-bottom: 1rem;
+  flex: 1 1 calc(33% - 20px); /* Responsive layout (3 columns) */
+  margin-bottom: 1.5rem;
+  background-color: rgba(169, 169, 169, 0.6); /* Semi-transparent grey background for capsules */
   padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background-color: #fefefe;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
 }
 
+.capsule-item:hover {
+  background-color: rgba(169, 169, 169, 0.8); /* Darker grey on hover */
+}
+
+/* Capsule details */
 .capsule-details {
   margin-bottom: 0.5rem;
   line-height: 1.5;
+  color: #333; /* Darker color for text inside the capsule */
 }
 
+
+/* Styling for tags */
+.tags-container {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag-bubble {
+  background-color: #ffffff; /* White background for tags */
+  color: #080809; /* Blue text color */
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px; /* Rounded corners for bubble effect */
+  font-size: 0.85rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for the tags */
+}
+
+/* Button styling */
 .toggle-btn, .open-btn {
-  background-color: #007bff;
-  color: #ffffff;
+  background-color: rgba(169, 169, 169, 0.6); /* Semi-transparent grey background */
+  color: white;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
 
 .toggle-btn:hover, .open-btn:hover {
-  background-color: #0056b3;
+  background-color: rgba(169, 169, 169, 0.8); /* Darker grey on hover */
 }
 
 .capsule-message {
   margin-top: 1rem;
   padding: 0.5rem;
-  background-color: #f1f1f1;
-  border-left: 4px solid #007bff;
+  background-color: rgba(240, 240, 240, 0.8); /* Light grey background for capsule message */
+  border-left: 4px solid #020202; /* Blue left border */
 }
 
-/* New Styles for Tags */
-.tags-container {
-  margin-top: 0.5rem;
-  display: flex; /* Flexbox for layout */
-  flex-wrap: wrap; /* Allow wrapping to the next line */
-  gap: 0.5rem; /* Space between the bubbles */
-}
-
-.tag-bubble {
-  display: inline-block;
-  background-color: #007bff; /* Bubble background color */
-  color: #ffffff; /* Text color */
-  padding: 0.3rem 0.8rem; /* Padding inside the bubble */
-  border-radius: 15px; /* Rounded corners for bubble effect */
-  font-size: 0.85rem; /* Slightly smaller text size */
-  font-weight: bold; /* Make text bold */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+/* Material button styles */
+mat-card-header {
+  background-color: #f5f5f5;
+  border-radius: 6px;
 }

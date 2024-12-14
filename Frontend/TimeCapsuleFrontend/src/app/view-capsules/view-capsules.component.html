@@ -20,10 +20,11 @@
     <mat-card *ngFor="let capsule of capsules" class="capsule-item">
       <mat-card-header>
         <mat-card-title>{{ capsule.title }}</mat-card-title>
-        <mat-card-subtitle>Sender: {{ capsule.senderUsername }} | Lock Date: {{ capsule.lockDate | date }}</mat-card-subtitle>
+        <mat-card-subtitle>
+          Sender: {{ capsule.senderUsername }} | Lock Date: {{ capsule.lockDate | date }}
+        </mat-card-subtitle>
       </mat-card-header>
 
-      <!-- Display tags as white bubbles -->
       <div class="tags-container">
         <span *ngFor="let tag of capsule.tags" class="tag-bubble">{{ tag.tagName }}</span>
       </div>
@@ -34,12 +35,13 @@
 
       <div *ngIf="expandedCapsuleID === capsule.capsuleID" class="capsule-message">
         <p><strong>Message:</strong> {{ capsule.message }}</p>
-        <button mat-raised-button color="accent" class="open-btn" (click)="markCapsuleAsOpened(capsule)">Mark as Opened</button>
+        <button mat-raised-button color="warn" class="delete-btn" (click)="deleteCapsule(capsule.capsuleID)">
+          Delete Capsule
+        </button>
       </div>
     </mat-card>
   </div>
 </div>
-
 
 
   

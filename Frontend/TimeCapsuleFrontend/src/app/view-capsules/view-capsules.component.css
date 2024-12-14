@@ -126,3 +126,17 @@ mat-card-header {
   background-color: transparent; /* No background for card header */
   border-radius: 6px;
 }
+.delete-btn {
+  background-color: #ff4d4d; /* Red for delete action */
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: #ff1a1a; /* Darker red on hover */
+}

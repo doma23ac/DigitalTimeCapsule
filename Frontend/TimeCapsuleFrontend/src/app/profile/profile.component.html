@@ -1,5 +1,5 @@
 <div class="profile-container">
-    <h2>User Profile</h2>
+    <h2>Update Profile</h2>
   
     <div>
       <p><strong>Username:</strong> {{ user.username }}</p>
@@ -24,12 +24,16 @@
           type="password"
           [(ngModel)]="password"
           name="password"
-          required
         />
       </div>
   
       <button type="submit">Update Profile</button>
     </form>
-  </div>
   
+    <hr />
+  
+    <button (click)="onDelete()" class="delete-button">
+      Delete Account
+    </button>
+  </div>
   

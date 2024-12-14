@@ -141,13 +141,70 @@ public class UserRepository : BaseRepository
 
     // Delete a user
     public bool DeleteUser(int userId)
-    {
-        using var conn = new NpgsqlConnection(ConnectionString);
-        var cmd = conn.CreateCommand();
-        cmd.CommandText = "DELETE FROM \"Users\" WHERE \"UserID\" = @userId";
-        cmd.Parameters.AddWithValue("@userId", userId);
+{
+    using var conn = new NpgsqlConnection(ConnectionString);
+    conn.Open();
 
-        return ExecuteCommand(conn, cmd);
+    using var transaction = conn.BeginTransaction(); // Begin a transaction
+    try
+    {
+        // Step 1: Delete rows in capsuletags associated with the user's capsules
+        using (var deleteCapsuleTagsCmd = conn.CreateCommand())
+        {
+            deleteCapsuleTagsCmd.CommandText = @"
+                DELETE FROM ""capsuletags""
+                WHERE ""capsuleid"" IN (
+                    SELECT ""CapsuleID""
+                    FROM ""Capsules""
+                    WHERE ""SenderId"" = @userId
+                )";
+            deleteCapsuleTagsCmd.Parameters.AddWithValue("@userId", userId);
+            deleteCapsuleTagsCmd.Transaction = transaction;
+            deleteCapsuleTagsCmd.ExecuteNonQuery();
+        }
+         using (var updateRecipientCapsulesCmd = conn.CreateCommand())
+        {
+            updateRecipientCapsulesCmd.CommandText = @"
+                UPDATE ""Capsules""
+                SET ""RecipientID"" = NULL
+                WHERE ""RecipientID"" = @userId";
+            updateRecipientCapsulesCmd.Parameters.AddWithValue("@userId", userId);
+            updateRecipientCapsulesCmd.Transaction = transaction;
+            updateRecipientCapsulesCmd.ExecuteNonQuery();
+        }
+
+        // Step 2: Delete rows in Capsules associated with the user
+        using (var deleteCapsulesCmd = conn.CreateCommand())
+        {
+            deleteCapsulesCmd.CommandText = @"
+                DELETE FROM ""Capsules""
+                WHERE ""SenderId"" = @userId";
+            deleteCapsulesCmd.Parameters.AddWithValue("@userId", userId);
+            deleteCapsulesCmd.Transaction = transaction;
+            deleteCapsulesCmd.ExecuteNonQuery();
+        }
+
+        // Step 3: Delete the user
+        using (var deleteUserCmd = conn.CreateCommand())
+        {
+            deleteUserCmd.CommandText = @"
+                DELETE FROM ""Users""
+                WHERE ""UserID"" = @userId";
+            deleteUserCmd.Parameters.AddWithValue("@userId", userId);
+            deleteUserCmd.Transaction = transaction;
+            deleteUserCmd.ExecuteNonQuery();
+        }
+
+        transaction.Commit(); // Commit the transaction
+        return true; // Deletion successful
     }
+    catch (Exception ex)
+    {
+        transaction.Rollback(); // Rollback on error
+        Console.Error.WriteLine($"Error deleting user: {ex.Message}");
+        throw; // Re-throw exception for further handling
+    }
+}
+
 }
 

@@ -61,5 +61,25 @@ export class ProfileComponent implements OnInit {
       },
     });
   }
+
+  onDelete(): void {
+    const confirmDelete = confirm(
+      'Are you sure you want to delete your account? This will permanently delete all your capsules.'
+    );
+
+    if (confirmDelete) {
+      this.http.delete(`${this.apiUrl}/${this.user.userId}`).subscribe({
+        next: () => {
+          alert('Your account and all associated data have been deleted.');
+          this.userService.clearUser(); // Clear user data from local storage
+          this.router.navigate(['/login']); // Redirect to login page
+        },
+        error: (err) => {
+          console.error('Error deleting user:', err);
+          alert('Failed to delete your account. Please try again.');
+        },
+      });
+    }
+  }
 }
 

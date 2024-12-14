@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DigitalTimeCapsuleAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+32ed56708249d9799b2b6dfa9463204cf6238802")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6667cae9b54d565544c10b70a7cada40b46c75b2")]
 [assembly: System.Reflection.AssemblyProductAttribute("DigitalTimeCapsuleAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DigitalTimeCapsuleAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

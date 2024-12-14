@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../user.service';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button'; // For mat-raised-button
-import { MatCardModule } from '@angular/material/card'; // For mat-card
-import { MatIconModule } from '@angular/material/icon'; // For mat-icon
-import { MatChipsModule } from '@angular/material/chips'; // For displaying tags as chips
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
 
 export interface Capsule {
   capsuleID: number;
@@ -33,8 +33,8 @@ export interface Tag {
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    MatChipsModule
-  ],  // Importing necessary Material modules here
+    MatChipsModule,
+  ],
   templateUrl: './view-capsules.component.html',
   styleUrls: ['./view-capsules.component.css'],
 })
@@ -42,7 +42,9 @@ export class ViewCapsulesComponent implements OnInit {
   capsules: Capsule[] = [];
   error: string | null = null;
   userID: number | null = null;
-  expandedCapsuleID: number | null = null; // To track expanded capsule
+  expandedCapsuleID: number | null = null;
+
+  private apiUrl = 'http://localhost:5062/api/capsules'; // Replace with your actual endpoint
 
   constructor(private http: HttpClient, private userService: UserService) {}
 
@@ -57,22 +59,15 @@ export class ViewCapsulesComponent implements OnInit {
   }
 
   fetchCapsules() {
-    const apiUrl = 'http://localhost:5062/api/capsules'; // Replace with your actual endpoint
-    this.http.get<Capsule[]>(apiUrl).subscribe({
+    this.http.get<Capsule[]>(this.apiUrl).subscribe({
       next: (data) => {
         const today = new Date();
-        // Filter capsules where RecipientID matches and LockDate is today or earlier
         this.capsules = data.filter(
           (capsule) =>
             capsule.recipientID === this.userID &&
-            new Date(capsule.lockDate) <= today &&
-            capsule.status !== 'opened'
+            new Date(capsule.lockDate) <= today
         );
-
-        // Fetch tags for each capsule
-        this.capsules.forEach((capsule) => {
-          this.fetchTagsForCapsule(capsule);
-        });
+        this.capsules.forEach((capsule) => this.fetchTagsForCapsule(capsule));
       },
       error: (err) => {
         console.error('Error fetching capsules:', err);
@@ -82,25 +77,38 @@ export class ViewCapsulesComponent implements OnInit {
   }
 
   fetchTagsForCapsule(capsule: Capsule) {
-    const tagsApiUrl = `http://localhost:5062/api/capsuletags/${capsule.capsuleID}`; // Replace with actual endpoint
+    const tagsApiUrl = `http://localhost:5062/api/capsuletags/${capsule.capsuleID}`;
     this.http.get<Tag[]>(tagsApiUrl).subscribe({
-      next: (tags) => {
-        capsule.tags = tags;
-      },
+      next: (tags) => (capsule.tags = tags),
       error: (err) => {
         console.error(`Error fetching tags for capsule ${capsule.capsuleID}:`, err);
-        capsule.tags = []; // Fallback to an empty array
+        capsule.tags = [];
       },
     });
   }
 
+  // Add the toggleCapsuleMessage method here
   toggleCapsuleMessage(capsuleID: number) {
-    // Toggle the expanded state
+    // Toggle the expanded state of the capsule
     this.expandedCapsuleID = this.expandedCapsuleID === capsuleID ? null : capsuleID;
   }
 
-  markCapsuleAsOpened(capsule: Capsule) {
-    capsule.status = 'opened';
-    this.expandedCapsuleID = null; // Collapse after marking as opened
+  deleteCapsule(capsuleID: number) {
+    const confirmDelete = confirm(
+      'Are you sure you want to delete this capsule? This action cannot be undone.'
+    );
+
+    if (confirmDelete) {
+      this.http.delete(`${this.apiUrl}/${capsuleID}`).subscribe({
+        next: () => {
+          alert('Capsule deleted successfully.');
+          this.capsules = this.capsules.filter((capsule) => capsule.capsuleID !== capsuleID);
+        },
+        error: (err) => {
+          console.error('Error deleting capsule:', err);
+          alert('Failed to delete the capsule. Please try again.');
+        },
+      });
+    }
   }
 }

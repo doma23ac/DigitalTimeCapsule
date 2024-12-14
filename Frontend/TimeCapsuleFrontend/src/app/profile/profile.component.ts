@@ -1,37 +1,65 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel
+import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http'; // Import HttpClient for API calls
 import { Router } from '@angular/router';
+import { UserService } from '../user.service'; // Import UserService
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Include FormsModule here
+  imports: [CommonModule, FormsModule], // Include CommonModule and FormsModule
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent {
-  user: any = { email: '' }; // Ensure user object has an initial structure
-  password: string = '';
+export class ProfileComponent implements OnInit {
+  user: any = { username: '', email: '' }; // User details
+  password: string = ''; // New password field
+  private apiUrl = 'http://localhost:5062/api/Users'; // API endpoint
 
-  constructor(private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    // Simulate user data fetching
-    this.user = { email: 'example@example.com' };
+    const loggedInUser = this.userService.getUser();
+
+    if (!loggedInUser) {
+      alert('No user is logged in. Redirecting to login.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.user.username = loggedInUser.username;
+    this.user.email = loggedInUser.email;
+    this.user.userId = loggedInUser.userId; // Store the user ID for updates
   }
 
   onUpdate(): void {
-    console.log('Updated user email:', this.user.email);
-    console.log('Updated password:', this.password);
-    // Add API call logic here to update user details
-  }
+    const updatePayload = {
+      userId: this.user.userId, // Ensure the correct user ID is sent
+      username: this.user.username, // Username may remain unchanged
+      email: this.user.email,
+      password: this.password, // Send new password if provided
+    };
 
-  onDelete(): void {
-    if (confirm('Are you sure you want to delete your account?')) {
-      console.log('User account deleted');
-      // Add API call logic here to delete user account
-      this.router.navigate(['/login']); // Redirect to login after deletion
-    }
+    this.http.put(`${this.apiUrl}/${this.user.userId}`, updatePayload).subscribe({
+      next: () => {
+        alert('Your profile has been updated successfully.');
+        // Optionally, update the local storage with the new email
+        this.userService.setUser({
+          userId: this.user.userId,
+          username: this.user.username,
+          email: this.user.email,
+        });
+      },
+      error: (err) => {
+        console.error('Error updating profile:', err);
+        alert('Failed to update profile. Please try again.');
+      },
+    });
   }
 }
+

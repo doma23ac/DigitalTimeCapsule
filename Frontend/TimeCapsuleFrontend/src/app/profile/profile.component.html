@@ -1,5 +1,10 @@
 <div class="profile-container">
-    <h2>Profile</h2>
+    <h2>User Profile</h2>
+  
+    <div>
+      <p><strong>Username:</strong> {{ user.username }}</p>
+    </div>
+  
     <form (ngSubmit)="onUpdate()">
       <div>
         <label for="email">Email:</label>
@@ -11,6 +16,7 @@
           required
         />
       </div>
+  
       <div>
         <label for="password">New Password:</label>
         <input
@@ -21,9 +27,9 @@
           required
         />
       </div>
-      <button type="submit">Update</button>
+  
+      <button type="submit">Update Profile</button>
     </form>
-    <button (click)="onDelete()" class="delete-button">Delete Account</button>
   </div>
   
   

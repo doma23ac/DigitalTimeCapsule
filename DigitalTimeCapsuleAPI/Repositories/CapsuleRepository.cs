@@ -99,14 +99,41 @@ public class CapsuleRepository : BaseRepository
     }
 
     public bool DeleteCapsule(int id)
-    {
-        using var conn = new NpgsqlConnection(ConnectionString);
-        var cmd = conn.CreateCommand();
-        cmd.CommandText = "DELETE FROM \"Capsules\" WHERE \"CapsuleID\" = @id";
-        cmd.Parameters.AddWithValue("@id", id);
+{
+    using var conn = new NpgsqlConnection(ConnectionString);
+    conn.Open();
 
-        return ExecuteCommand(conn, cmd);
+    using var transaction = conn.BeginTransaction(); // Begin a transaction
+    try
+    {
+        // Delete related rows in the CapsuleTags table
+        using (var deleteTagsCmd = conn.CreateCommand())
+        {
+            deleteTagsCmd.CommandText = "DELETE FROM \"capsuletags\" WHERE \"capsuleid\" = @id";
+            deleteTagsCmd.Parameters.AddWithValue("@id", id);
+            deleteTagsCmd.Transaction = transaction; // Use the transaction
+            deleteTagsCmd.ExecuteNonQuery();
+        }
+
+        // Delete the capsule itself
+        using (var deleteCapsuleCmd = conn.CreateCommand())
+        {
+            deleteCapsuleCmd.CommandText = "DELETE FROM \"Capsules\" WHERE \"CapsuleID\" = @id";
+            deleteCapsuleCmd.Parameters.AddWithValue("@id", id);
+            deleteCapsuleCmd.Transaction = transaction; // Use the transaction
+            deleteCapsuleCmd.ExecuteNonQuery();
+        }
+
+        transaction.Commit(); // Commit the transaction
+        return true; // Deletion successful
     }
+    catch
+    {
+        transaction.Rollback(); // Rollback the transaction on failure
+        throw; // Re-throw the exception
+    }
+}
+
 
     public List<Capsule> GetAllCapsules()
 {

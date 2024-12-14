@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';  // <-- Add this import
+import { MatInputModule } from '@angular/material/input'; // For input fields
+import { MatButtonModule } from '@angular/material/button'; // For buttons
+import { FormsModule } from '@angular/forms';  // For ngModel
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],  // <-- Include FormsModule here
+  imports: [CommonModule, MatInputModule, MatButtonModule, FormsModule],  // Include Material modules here
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -45,8 +47,6 @@ export class LoginComponent {
     this.router.navigate(['/signup']);
   }
 }
-
-
 
 
 

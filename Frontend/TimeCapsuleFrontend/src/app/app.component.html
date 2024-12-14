@@ -1,19 +1,4 @@
-<div class="landing-page" *ngIf="isLandingPage(); else routedContent">
-  <h1>Welcome to My Landing Page</h1>
-  <form (ngSubmit)="onLogin()">
-    <label for="email">Email:</label>
-    <input type="email" id="email" [(ngModel)]="loginData.email" name="email" required />
+<main>
+  <router-outlet></router-outlet>  <!-- This will render the login form when navigating to the root -->
+</main>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" [(ngModel)]="loginData.password" name="password" required />
-
-    <button type="submit">Login</button>
-  </form>
-  <button class="signup-button" (click)="navigateToSignup()">Sign Up</button>
-  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
-  <a routerLink="/view-capsules">View Capsules</a>
-</div>
-
-<ng-template #routedContent>
-  <router-outlet></router-outlet>
-</ng-template>

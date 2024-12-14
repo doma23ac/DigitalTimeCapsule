@@ -39,12 +39,12 @@ h1 {
 /* Styling the button */
 button {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 70px;
+  right: 70px;
   z-index: 2;  /* Make sure the button is above the content */
   padding: 10px 20px;
   font-size: 1rem;
-  background-color: rgba(211, 211, 211, 0.7); /* Light grey with transparency */
+  background-color: rgba(211, 211, 211, 0.5); /* Light grey with transparency */
   color: black;
   border: none;
   border-radius: 5px;

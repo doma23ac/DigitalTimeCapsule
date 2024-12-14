@@ -1,20 +1,35 @@
 <div class="personal-page">
-  <div class="rain-overlay"></div> <!-- Rain animation -->
+  <!-- Rain animation overlay -->
+  <div class="rain-overlay"></div> 
 
-  <h1>Welcome to Your Digital Time Capsule</h1>
-  <p>Here you can create new capsules or view the ones you've already saved!</p>
+  <!-- Main content -->
+  <div class="content">
+    <!-- Header with username -->
+    <h1>Welcome, {{ user?.username }}!</h1>
 
-  <div class="actions">
-    <button (click)="createNewCapsule()">Create New Capsule</button>
-    <button (click)="viewCapsules()">View Available Capsules</button>
+    <!-- Artsy introduction text -->
+    <p class="intro-text">
+      Welcome to your **Digital Time Capsule**, a place where memories are preserved and rediscovered. 
+      <br><br>
+      Create a new capsule to save your thoughts, messages, or memories for the future. 
+      You can send capsules to yourself as a reminder of your journey or share them with others to create lasting connections.
+      <br><br>
+      Explore the capsules you've already created or start building a new one today!
+    </p>
+
+    <!-- Buttons to create and view capsules -->
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="createNewCapsule()" class="action-button">Create New Capsule</button>
+      <button mat-raised-button color="accent" (click)="viewCapsules()" class="action-button">View Available Capsules</button>
+    </div>
+    
+    <!-- User details (email and userId) -->
+    <div class="user-details">
+      <p>Email: {{ user?.email }}</p>
+      <p>User ID: {{ user?.userId }}</p>
+      <button mat-button color="warn" (click)="logout()">Logout</button>
+    </div>
   </div>
-</div>
-
-<div>
-  <h1>Welcome, {{ user?.username }}!</h1>
-  <p>Email: {{ user?.email }}</p>
-  <p>User ID: {{ user?.userId }}</p>
-  <button (click)="logout()">Logout</button>
 </div>
 
 

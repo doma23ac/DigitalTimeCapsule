@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // For *ngIf and other directives
-import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms'; // For ngModel
+import { HttpClient } from '@angular/common/http'; // For HttpClient
+
+import { MatInputModule } from '@angular/material/input'; // For matInput
+import { MatButtonModule } from '@angular/material/button'; // For mat-raised-button
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [CommonModule, FormsModule, MatInputModule, MatButtonModule],  // Importing necessary Material modules
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })

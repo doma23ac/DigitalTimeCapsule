@@ -1,22 +1,26 @@
 <div class="signup-container">
+  <!-- Header for Sign Up -->
   <h1>Sign Up</h1>
+
+  <!-- Form for signing up -->
   <form (ngSubmit)="onSignup()">
-    <div class="form-group">
-      <label for="username">Username:</label>
-      <input type="text" id="username" [(ngModel)]="signupData.username" name="username" required />
-    </div>
+    <!-- Username input field -->
+    <mat-form-field class="input-field">
+      <input matInput type="text" id="username" [(ngModel)]="signupData.username" name="username" required placeholder="Username" />
+    </mat-form-field>
 
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" id="email" [(ngModel)]="signupData.email" name="email" required />
-    </div>
+    <!-- Email input field -->
+    <mat-form-field class="input-field">
+      <input matInput type="email" id="email" [(ngModel)]="signupData.email" name="email" required placeholder="Email" />
+    </mat-form-field>
 
-    <div class="form-group">
-      <label for="password">Password:</label>
-      <input type="password" id="password" [(ngModel)]="signupData.password" name="password" required />
-    </div>
+    <!-- Password input field -->
+    <mat-form-field class="input-field">
+      <input matInput type="password" id="password" [(ngModel)]="signupData.password" name="password" required placeholder="Password" />
+    </mat-form-field>
 
-    <button type="submit">Sign Up</button>
+    <!-- Submit button for sign-up -->
+    <button mat-raised-button color="primary" type="submit" class="action-button">Sign Up</button>
   </form>
 
   <!-- Display Success or Error Messages -->
@@ -24,6 +28,5 @@
   <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
 </div>
 
-  
   
   

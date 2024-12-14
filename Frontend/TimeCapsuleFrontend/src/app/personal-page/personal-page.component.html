@@ -2,6 +2,11 @@
   <!-- Rain animation overlay -->
   <div class="rain-overlay"></div> 
 
+  <!-- Profile button in the top-left corner -->
+  <button mat-icon-button color="primary" (click)="goToProfile()" class="profile-button">
+    <mat-icon>person</mat-icon>
+  </button>
+
   <!-- Main content -->
   <div class="content">
     <!-- Header with username -->
@@ -9,7 +14,7 @@
 
     <!-- Artsy introduction text -->
     <p class="intro-text">
-      Welcome to your **Digital Time Capsule**, a place where memories are preserved and rediscovered. 
+      Welcome to your <strong>Digital Time Capsule</strong>, a place where memories are preserved and rediscovered. 
       <br><br>
       Create a new capsule to save your thoughts, messages, or memories for the future. 
       You can send capsules to yourself as a reminder of your journey or share them with others to create lasting connections.
@@ -22,16 +27,7 @@
       <button mat-raised-button color="primary" (click)="createNewCapsule()" class="action-button">Create New Capsule</button>
       <button mat-raised-button color="accent" (click)="viewCapsules()" class="action-button">View Available Capsules</button>
     </div>
-    
-    <!-- User details (email and userId) -->
-    <div class="user-details">
-      <p>Email: {{ user?.email }}</p>
-      <p>User ID: {{ user?.userId }}</p>
-      <button mat-button color="warn" (click)="logout()">Logout</button>
-    </div>
   </div>
 </div>
 
-
-  
   

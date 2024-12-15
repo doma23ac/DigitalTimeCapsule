@@ -1,4 +1,3 @@
-<!-- Background YouTube Video -->
 <div class="background-video-container">
   <iframe
     class="background-video"
@@ -13,73 +12,63 @@
   <h1 class="welcome-message">Create Your Capsule</h1>
 </div>
 
-<div class="login-form create-capsule">
-  <p>Welcome, {{ userName }}!</p>
-
+<div class="login-form">
   <form (ngSubmit)="onSubmit()" #capsuleForm="ngForm">
     <!-- Title -->
-    <div class="form-group">
-      <mat-form-field appearance="fill" class="form-field title-field">
-        <mat-label>Title</mat-label>
-        <input
-          matInput
-          id="title"
-          [(ngModel)]="capsule.title"
-          name="title"
-          required
-          placeholder="Enter capsule title"
-        />
-      </mat-form-field>
-    </div>
+    <mat-form-field class="input-field" floatLabel="always">
+      <mat-label>Title</mat-label>
+      <input
+        matInput
+        id="title"
+        [(ngModel)]="capsule.title"
+        name="title"
+        required
+        placeholder="Enter capsule title"
+      />
+    </mat-form-field>
 
     <!-- Message -->
-    <div class="form-group">
-      <mat-form-field appearance="fill" class="form-field">
-        <mat-label>Your Message</mat-label>
-        <textarea
-          matInput
-          id="message"
-          [(ngModel)]="capsule.message"
-          name="message"
-          required
-          rows="4"
-          placeholder="Write your message here..."
-        ></textarea>
-      </mat-form-field>
-    </div>
+    <mat-form-field class="input-field" floatLabel="always">
+      <mat-label>Your Message</mat-label>
+      <textarea
+        matInput
+        id="message"
+        [(ngModel)]="capsule.message"
+        name="message"
+        required
+        rows="4"
+        placeholder="Write your message here..."
+      ></textarea>
+    </mat-form-field>
 
     <!-- Date to Open -->
-    <div class="form-group">
-      <mat-form-field appearance="fill" class="form-field">
-        <mat-label>Date to Open</mat-label>
-        <input
-          matInput
-          type="date"
-          id="lockDate"
-          [(ngModel)]="capsule.lockDate"
-          name="lockDate"
-          required
-        />
-      </mat-form-field>
-    </div>
+    <mat-form-field class="input-field" floatLabel="always">
+      <mat-label>Date to Open</mat-label>
+      <input
+        matInput
+        type="date"
+        id="lockDate"
+        [(ngModel)]="capsule.lockDate"
+        name="lockDate"
+        required
+      />
+    </mat-form-field>
 
     <!-- Recipient -->
-    <div class="form-group">
-      <mat-form-field appearance="fill" class="form-field">
-        <mat-label>Receiver</mat-label>
-        <input
-          matInput
-          id="recipientUsername"
-          [(ngModel)]="capsule.recipientUsername"
-          name="recipientUsername"
-          required
-          placeholder="Enter recipient username"
-        />
-      </mat-form-field>
-    </div>
+    <mat-form-field class="input-field" floatLabel="always">
+      <mat-label>Receiver</mat-label>
+      <input
+        matInput
+        id="recipientUsername"
+        [(ngModel)]="capsule.recipientUsername"
+        name="recipientUsername"
+        required
+        placeholder="Enter recipient username"
+      />
+    </mat-form-field>
 
     <!-- Tags -->
-    <div class="form-group tags-section">
+    <div class="tags-section">
       <label class="tags-label">Select Tags</label>
       <div class="tags-container">
         <mat-checkbox
@@ -94,26 +83,23 @@
     </div>
 
     <!-- Buttons -->
-    <div class="form-actions">
-      <button
-        mat-raised-button
-        color="primary"
-        type="submit"
-        class="submit-button"
-        [disabled]="capsuleForm.invalid"
-      >
-        Create Capsule
-      </button>
-      <button
-        mat-raised-button
-        color="warn"
-        type="button"
-        class="back-button"
-        (click)="goBack()"
-      >
-        Go Back
-      </button>
-    </div>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      class="login-button"
+      [disabled]="capsuleForm.invalid"
+    >
+      Create Capsule
+    </button>
+    <button
+      mat-raised-button
+      color="warn"
+      type="button"
+      class="signup-button"
+      (click)="goBack()"
+    >
+      Go Back
+    </button>
   </form>
 </div>
-

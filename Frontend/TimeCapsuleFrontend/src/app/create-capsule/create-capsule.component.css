@@ -1,11 +1,11 @@
-/* Background YouTube Video */
+/* Background Video */
 .background-video-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* Ensure the video stays behind the content */
+  z-index: -1; /* Ensure video stays behind the form */
 }
 
 .background-video {
@@ -15,118 +15,115 @@
   width: 100%;
   height: 100%;
   border: none;
-  object-fit: cover; /* Ensure the video fills the screen */
+  object-fit: cover; /* Ensure video fills the screen */
 }
 
-/* Main capsule form container */
-.create-capsule {
-  max-width: 1200px; /* Doubled the width */
-  margin: 2rem auto;
-  padding: 2.5rem;
-  background: rgba(169, 169, 169, 0.6); /* Semi-transparent grey */
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+/* Center the form */
+.login-form {
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+  padding: 20px;
+  border-radius: 8px;
+  width: 800px; /* Slightly wider for better centering */
+  color: white;
   text-align: center;
+  margin: 10% auto; /* Center vertically and horizontally */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Welcome message styling */
-.welcome-message-container {
+.mat-input-element {
+  font-size: 16px; /* Adjust the text size inside the input */
+  padding: 20px; /* Add padding to adjust height */
+  line-height: 1.5; /* Ensure consistent spacing between lines */
+}
+/* Input fields and buttons */
+.input-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+mat-form-field {
+  width: 100%; /* Full-width input fields */
+  background-color: rgba(169, 169, 169, 0.4); /* Semi-transparent grey */
+  border-radius: 5px;
+}
+
+button {
+  width: 100%; /* Full-width buttons */
+  margin-top: 10px;
+}
+
+.login-button,
+.signup-button {
+  background-color: rgba(169, 169, 169, 0.6);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1rem;
   text-align: center;
-  margin-bottom: 2rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.welcome-message {
-  font-size: 2.5rem;
-  color: #ffffff;
-  margin: 0;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+button {
+  width: 100%; /* Full-width buttons */
+  margin-top: 10px; /* Space between buttons */
 }
 
-/* Subheader text */
-.create-capsule p {
-  font-size: 1.3rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 2rem;
+.login-button,
+.signup-button {
+  background-color: rgba(169, 169, 169, 0.6); /* Semi-transparent grey background */
+  color: white; /* White text */
+  border: none; /* Remove any borders */
+  border-radius: 5px; /* Rounded corners for smoothness */
+  padding: 10px; /* Padding for better touch area */
+  font-size: 1rem; /* Font size for button text */
+  text-align: center; /* Center align button text */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transition */
+  display: inline-block; /* Consistent rendering */
 }
 
-/* Form group styling */
-.form-group {
-  margin-bottom: 3rem; /* Ensures sufficient spacing */
+/* Ensure the default background and transparency */
+.login-button:not(:hover),
+.signup-button:not(:hover) {
+  background-color: rgba(169, 169, 169, 0.6); /* Default transparent grey */
 }
 
-/* Form field styling */
-.form-field {
-  width: 90%; /* Wider fields */
-  font-size: 1.1rem;
+/* Hover effect for buttons */
+.login-button:hover,
+.signup-button:hover {
+  background-color: rgba(169, 169, 169, 0.8); /* Slightly darker grey on hover */
+  color: white; /* Ensure text remains white */
 }
 
-.title-field {
-  width: 100%; /* Title field is even wider */
-  font-size: 1.3rem;
-  margin-bottom: 3rem;
-}
 
-/* Textarea styling */
-textarea.mat-input-element {
-  line-height: 1.5;
-  font-size: 1.1rem;
-  padding: 12px;
-  box-sizing: border-box;
-}
 
-/* Tags section */
+
+/* Tags Section */
 .tags-section {
   text-align: left;
-  margin-bottom: 3rem;
+  margin-bottom: 20px;
 }
 
 .tags-label {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 0.5rem;
+  margin-bottom: 5px;
   display: block;
 }
 
 .tags-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 10px;
 }
 
 .tag-checkbox {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 5px;
-  padding: 10px;
+  padding: 5px;
   color: white;
 }
 
-/* Buttons */
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.back-button,
-.submit-button {
-  flex: 1;
-  font-size: 1.1rem;
-}
-
-.submit-button {
-  background-color: rgba(0, 128, 0, 0.6);
-  color: white;
-}
-
-.submit-button:hover {
-  background-color: rgba(0, 128, 0, 0.8);
-}
-
-.back-button {
-  background-color: rgba(169, 169, 169, 0.6);
-  color: white;
-}
-
-.back-button:hover {
-  background-color: rgba(169, 169, 169, 0.8);
-}

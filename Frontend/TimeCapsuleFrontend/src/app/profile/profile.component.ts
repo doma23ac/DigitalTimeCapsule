@@ -1,21 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http'; // Import HttpClient for API calls
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { UserService } from '../user.service'; // Import UserService
+import { UserService } from '../user.service';
+
+// Import Material modules
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Include CommonModule and FormsModule
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule, // Import MatFormFieldModule
+    MatInputModule,     // Import MatInputModule
+    MatButtonModule     // Import MatButtonModule
+  ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user: any = { username: '', email: '' }; // User details
-  password: string = ''; // New password field
-  private apiUrl = 'http://localhost:5062/api/Users'; // API endpoint
+  user: any = { username: '', email: '' };
+  password: string = '';
+  private apiUrl = 'http://localhost:5062/api/Users';
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
   constructor(
     private userService: UserService,
@@ -27,38 +40,50 @@ export class ProfileComponent implements OnInit {
     const loggedInUser = this.userService.getUser();
 
     if (!loggedInUser) {
-      alert('No user is logged in. Redirecting to login.');
+      this.errorMessage = 'No user is logged in. Redirecting to login.';
       this.router.navigate(['/login']);
       return;
     }
 
     this.user.username = loggedInUser.username;
     this.user.email = loggedInUser.email;
-    this.user.userId = loggedInUser.userId; // Store the user ID for updates
+    this.user.userId = loggedInUser.userId;
   }
 
   onUpdate(): void {
+    this.successMessage = null;
+    this.errorMessage = null;
+
+    if (!this.validateEmail(this.user.email)) {
+      this.errorMessage = 'Invalid email address.';
+      return;
+    }
+
+    if (this.password && !this.validatePassword(this.password)) {
+      this.errorMessage =
+        'Password must contain at least one uppercase letter, one special character, and be 6-12 characters long.';
+      return;
+    }
+
     const updatePayload = {
-      userId: this.user.userId, // Ensure the correct user ID is sent
-      username: this.user.username, // Username may remain unchanged
+      userId: this.user.userId,
+      username: this.user.username,
       email: this.user.email,
-      password: this.password, // Send new password if provided
+      password: this.password || undefined
     };
 
     this.http.put(`${this.apiUrl}/${this.user.userId}`, updatePayload).subscribe({
       next: () => {
-        alert('Your profile has been updated successfully.');
-        // Optionally, update the local storage with the new email
+        this.successMessage = 'Your profile has been updated successfully.';
         this.userService.setUser({
           userId: this.user.userId,
           username: this.user.username,
-          email: this.user.email,
+          email: this.user.email
         });
       },
-      error: (err) => {
-        console.error('Error updating profile:', err);
-        alert('Failed to update profile. Please try again.');
-      },
+      error: () => {
+        this.errorMessage = 'Failed to update profile. Please try again.';
+      }
     });
   }
 
@@ -70,16 +95,27 @@ export class ProfileComponent implements OnInit {
     if (confirmDelete) {
       this.http.delete(`${this.apiUrl}/${this.user.userId}`).subscribe({
         next: () => {
-          alert('Your account and all associated data have been deleted.');
-          this.userService.clearUser(); // Clear user data from local storage
-          this.router.navigate(['/login']); // Redirect to login page
+          this.successMessage = 'Your account has been deleted.';
+          this.userService.clearUser();
+          this.router.navigate(['/login']);
         },
-        error: (err) => {
-          console.error('Error deleting user:', err);
-          alert('Failed to delete your account. Please try again.');
-        },
+        error: () => {
+          this.errorMessage = 'Failed to delete your account. Please try again.';
+        }
       });
     }
   }
-}
 
+  navigateToPersonalPage(): void {
+    this.router.navigate(['/personal']);
+  }
+
+  validateEmail(email: string): boolean {
+    return email.includes('@');
+  }
+
+  validatePassword(password: string): boolean {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,12}$/;
+    return passwordRegex.test(password);
+  }
+}

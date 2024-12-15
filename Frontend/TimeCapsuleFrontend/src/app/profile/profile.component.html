@@ -1,39 +1,49 @@
-<div class="profile-container">
-    <h2>Update Profile</h2>
-  
-    <div>
-      <p><strong>Username:</strong> {{ user.username }}</p>
-    </div>
-  
-    <form (ngSubmit)="onUpdate()">
-      <div>
-        <label for="email">Email:</label>
-        <input
-          id="email"
-          type="email"
-          [(ngModel)]="user.email"
-          name="email"
-          required
-        />
-      </div>
-  
-      <div>
-        <label for="password">New Password:</label>
-        <input
-          id="password"
-          type="password"
-          [(ngModel)]="password"
-          name="password"
-        />
-      </div>
-  
-      <button type="submit">Update Profile</button>
-    </form>
-  
-    <hr />
-  
-    <button (click)="onDelete()" class="delete-button">
-      Delete Account
-    </button>
+<div class="welcome-message-container">
+  <h1 class="welcome-message">Update Your Profile</h1>
+</div>
+
+<div class="login-form">
+  <div class="welcome-message-container">
+    <p><strong>Username:</strong> {{ user.username }}</p>
   </div>
-  
+
+  <form (ngSubmit)="onUpdate()">
+    <mat-form-field class="input-field">
+      <input
+        matInput
+        id="email"
+        type="email"
+        [(ngModel)]="user.email"
+        name="email"
+        required
+        placeholder="Email"
+      />
+    </mat-form-field>
+
+    <mat-form-field class="input-field">
+      <input
+        matInput
+        id="password"
+        type="password"
+        [(ngModel)]="password"
+        name="password"
+        placeholder="New Password"
+      />
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" color="primary" class="login-button">
+      Update Profile
+    </button>
+  </form>
+
+  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <button mat-button (click)="navigateToPersonalPage()" class="signup-button">
+    Go Back
+  </button>
+
+  <button mat-raised-button (click)="onDelete()" class="login-button delete-button">
+    Delete Account
+  </button>
+</div>

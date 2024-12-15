@@ -37,4 +37,3 @@ export class PersonalPageComponent implements OnInit {
     this.router.navigate(['/profile']); // Navigate to the profile page
   }
 }
-

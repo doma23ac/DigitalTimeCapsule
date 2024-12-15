@@ -1,10 +1,12 @@
 <div class="personal-page">
-  <!-- Rain animation overlay -->
-  <div class="rain-overlay"></div> 
-
   <!-- Profile button in the top-left corner -->
-  <button mat-icon-button color="primary" (click)="goToProfile()" class="profile-button">
+  <button mat-icon-button (click)="goToProfile()" class="profile-button">
     <mat-icon>person</mat-icon>
+  </button>
+
+  <!-- Logout button in the top-right corner -->
+  <button mat-icon-button (click)="logout()" class="logout-button">
+    <mat-icon>logout</mat-icon>
   </button>
 
   <!-- Main content -->
@@ -29,5 +31,3 @@
     </div>
   </div>
 </div>
-
-  

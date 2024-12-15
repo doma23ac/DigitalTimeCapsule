@@ -7,43 +7,15 @@
   overflow: hidden;
 }
 
-/* Rain Overlay */
-.rain-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
 
-.rain-overlay::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 2px);
-  background-size: 2px 20px;
-  animation: rain-animation 0.5s infinite linear;
-}
 
-@keyframes rain-animation {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(100%);
-  }
-}
+
 
 /* Content Styling */
 .content {
   position: relative;
   z-index: 1;
-  margin-top: 50px;
+  margin-top: 150px;
 }
 
 h1 {
@@ -74,12 +46,14 @@ h1 {
 }
 
 .action-button {
-  width: 250px;
-  padding: 15px;
-  font-size: 1.2rem;
-  border-radius: 10px;
   background-color: rgba(169, 169, 169, 0.6);
   color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1rem;
+  width: 100%;
+  text-align: center;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -90,29 +64,54 @@ h1 {
 
 /* Profile button in the top-left corner */
 .profile-button {
-  position: absolute; /* Place it in the top-left corner */
-  top: 25px; /* Adjust for consistent spacing from the top */
-  left: 10px; /* Adjust for consistent spacing from the left */
-  z-index: 20; /* Ensure it stays above other elements */
-  background-color: transparent; /* Transparent background */
-  border: none; /* No border for a clean look */
-  cursor: pointer; /* Show pointer on hover */
-  width: 80px; /* Standard size for Material Design buttons */
-  height: 80px; /* Matches the width */
-  display: flex; /* Centers the icon */
-  align-items: center; /* Centers the icon vertically */
-  justify-content: center; /* Centers the icon horizontally */
-  padding: 0; /* No extra padding */
+  position: absolute;
+  top: 20px; /* Same height for consistency */
+  left: 15px; /* Adjust spacing from the left */
+  z-index: 20;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; /* Consistent size */
+  height: 48px; /* Consistent size */
+  padding: 0;
 }
 
-/* Style the icon */
 .profile-button mat-icon {
-  font-size: 30px; /* Standard Material icon size */
-  color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
-  transition: color 0.3s ease; /* Smooth hover effect */
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.3s ease;
 }
 
 .profile-button:hover mat-icon {
-  color: rgba(255, 255, 255, 1); /* Full white on hover */
+  color: rgba(255, 255, 255, 1);
 }
 
+/* Logout button in the top-right corner */
+.logout-button {
+  position: absolute;
+  top: 20px; /* Same height as profile button */
+  right: 15px; /* Adjust spacing from the right */
+  z-index: 20;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; /* Consistent size */
+  height: 48px; /* Consistent size */
+  padding: 0;
+}
+
+.logout-button mat-icon {
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.3s ease;
+}
+
+.logout-button:hover mat-icon {
+  color: rgba(255, 255, 255, 1);
+}

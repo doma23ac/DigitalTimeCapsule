@@ -1,6 +1,6 @@
-/* Ensure the YouTube video covers the whole background */
+/* Background YouTube Video */
 .background-video-container {
-  position: fixed; /* Fix the video to the background */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -18,50 +18,70 @@
   object-fit: cover; /* Ensure the video fills the screen */
 }
 
-
-/* Wrapper for the form */
+/* Main capsule form container */
 .create-capsule {
-  max-width: 600px;
+  max-width: 1200px; /* Doubled the width */
   margin: 2rem auto;
-  padding: 2rem;
+  padding: 2.5rem;
   background: rgba(169, 169, 169, 0.6); /* Semi-transparent grey */
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
-/* Header styles */
-h1 {
-  font-size: 2rem;
+/* Welcome message styling */
+.welcome-message-container {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.welcome-message {
+  font-size: 2.5rem;
   color: #ffffff;
-  margin-bottom: 1.5rem;
+  margin: 0;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 /* Subheader text */
-p {
-  font-size: 1.1rem;
+.create-capsule p {
+  font-size: 1.3rem;
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 2rem;
 }
 
 /* Form group styling */
 .form-group {
-  margin-bottom: 3rem; /* Adds more spacing between form groups */
+  margin-bottom: 3rem; /* Ensures sufficient spacing */
 }
 
 /* Form field styling */
 .form-field {
-  width: 100%; /* Ensures all fields take up full width */
+  width: 90%; /* Wider fields */
+  font-size: 1.1rem;
+}
+
+.title-field {
+  width: 100%; /* Title field is even wider */
+  font-size: 1.3rem;
+  margin-bottom: 3rem;
+}
+
+/* Textarea styling */
+textarea.mat-input-element {
+  line-height: 1.5;
+  font-size: 1.1rem;
+  padding: 12px;
+  box-sizing: border-box;
 }
 
 /* Tags section */
 .tags-section {
-  text-align: left; /* Align tags to the left */
-  margin-bottom: 2rem;
+  text-align: left;
+  margin-bottom: 3rem;
 }
 
 .tags-label {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 0.5rem;
   display: block;
@@ -70,56 +90,43 @@ p {
 .tags-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
 }
 
 .tag-checkbox {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 5px;
-  padding: 5px;
+  padding: 10px;
+  color: white;
 }
 
-/* Form actions */
+/* Buttons */
 .form-actions {
   display: flex;
   justify-content: space-between;
-  gap: 10px; /* Adds spacing between buttons */
+  gap: 20px;
 }
 
 .back-button,
 .submit-button {
-  flex: 1; /* Make buttons equal width */
+  flex: 1;
+  font-size: 1.1rem;
 }
 
-/* Input and Textarea Adjustments */
-.mat-form-field-infix {
-  padding: 0.5rem 0; /* Ensure there is enough space for the text */
+.submit-button {
+  background-color: rgba(0, 128, 0, 0.6);
+  color: white;
 }
 
-/* Input and Textarea Adjustments */
-textarea.mat-input-element,
-input.mat-input-element {
-  line-height: 1.5; /* Ensure consistent text height */
-  padding: 12px; /* Add sufficient padding for comfortable spacing */
-  font-size: 16px; /* Ensure readable text */
-  box-sizing: border-box; /* Prevent content overflow */
+.submit-button:hover {
+  background-color: rgba(0, 128, 0, 0.8);
 }
 
-.mat-form-field-wrapper {
-  padding-bottom: 8px; /* Add space at the bottom to prevent text clipping */
+.back-button {
+  background-color: rgba(169, 169, 169, 0.6);
+  color: white;
 }
 
-.mat-form-field-infix {
-  padding: 12px 0; /* Add vertical padding for the input area */
+.back-button:hover {
+  background-color: rgba(169, 169, 169, 0.8);
 }
-
-.mat-form-field-label {
-  font-size: 16px; /* Match font size of the input */
-  line-height: 1.5; /* Prevent label overlap */
-  transform: translateY(14px); /* Ensure proper alignment when not focused */
-}
-
-.mat-form-field-should-float .mat-form-field-label {
-  transform: translateY(-22px); /* Adjust floating label position */
-}
-

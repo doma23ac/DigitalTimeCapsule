@@ -32,6 +32,11 @@ namespace DigitalTimeCapsuleAPI.Controllers
             {
                 return Conflict(new { message = "Email is already in use" });
             }
+             // Check if the username is already in use
+            if (existingUsers.Any(u => u.Username == request.Username))
+            {
+                return Conflict(new { message = "Username is already in use" });
+            }
 
             // Create and save new user
             var newUser = new User

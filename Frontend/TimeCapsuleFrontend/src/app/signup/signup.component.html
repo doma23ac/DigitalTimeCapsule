@@ -1,32 +1,28 @@
-<div class="signup-container">
-  <!-- Header for Sign Up -->
-  <h1>Sign Up</h1>
-
-  <!-- Form for signing up -->
-  <form (ngSubmit)="onSignup()">
-    <!-- Username input field -->
-    <mat-form-field class="input-field">
-      <input matInput type="text" id="username" [(ngModel)]="signupData.username" name="username" required placeholder="Username" />
-    </mat-form-field>
-
-    <!-- Email input field -->
-    <mat-form-field class="input-field">
-      <input matInput type="email" id="email" [(ngModel)]="signupData.email" name="email" required placeholder="Email" />
-    </mat-form-field>
-
-    <!-- Password input field -->
-    <mat-form-field class="input-field">
-      <input matInput type="password" id="password" [(ngModel)]="signupData.password" name="password" required placeholder="Password" />
-    </mat-form-field>
-
-    <!-- Submit button for sign-up -->
-    <button mat-raised-button color="primary" type="submit" class="action-button">Sign Up</button>
-  </form>
-
-  <!-- Display Success or Error Messages -->
-  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
-  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+<div class="welcome-message-container">
+  <h1 class="welcome-message">Sign Up to the Digital Time Capsule!</h1>
 </div>
 
-  
+<div class="login-form">
+  <form (ngSubmit)="onSignup()">
+    <mat-form-field class="input-field">
+      <input matInput type="text" [(ngModel)]="signupData.username" name="username" required placeholder="Username" />
+    </mat-form-field>
+
+    <mat-form-field class="input-field">
+      <input matInput type="email" [(ngModel)]="signupData.email" name="email" required placeholder="Email" />
+    </mat-form-field>
+
+    <mat-form-field class="input-field">
+      <input matInput type="password" [(ngModel)]="signupData.password" name="password" required placeholder="Password" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" class="login-button">Sign Up</button>
+  </form>
+
+  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <button mat-button (click)="navigateToLogin()" class="signup-button">Back to Login</button>
+</div>
+
   

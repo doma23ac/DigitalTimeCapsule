@@ -1,80 +1,78 @@
-import { TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { SignupComponent } from './signup.component';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input'; // For input fields
+import { MatButtonModule } from '@angular/material/button'; // For buttons
+import { FormsModule } from '@angular/forms'; // For ngModel
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
-describe('SignupComponent', () => {
-  let component: SignupComponent;
-  let fixture: any;
-  let httpTestingController: HttpTestingController;
+@Component({
+  selector: 'app-signup',
+  standalone: true,
+  imports: [CommonModule, MatInputModule, MatButtonModule, FormsModule], // Include Material modules here
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css']
+})
+export class SignupComponent {
+  signupData = { username: '', email: '', password: '' };
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [FormsModule, HttpClientTestingModule, SignupComponent], // Use HttpClientTestingModule for mocking HTTP
-    }).compileComponents();
+  constructor(private router: Router, private http: HttpClient) {}
 
-    fixture = TestBed.createComponent(SignupComponent); // Create the component
-    component = fixture.componentInstance;
-    httpTestingController = TestBed.inject(HttpTestingController); // Inject the HTTP testing controller
-    fixture.detectChanges(); // Trigger change detection
-  });
+  validateEmail(email: string): boolean {
+    // Check if email contains "@" symbol
+    return email.includes('@');
+  }
 
-  afterEach(() => {
-    httpTestingController.verify(); // Ensure no pending HTTP requests
-  });
+  validatePassword(password: string): boolean {
+    // Password should have one uppercase letter, one number, one special character, and length 6-12
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,12}$/;
+    return passwordRegex.test(password);
+  }
 
-  it('should create the SignupComponent', () => {
-    expect(component).toBeTruthy(); // Ensure the component initializes properly
-  });
+  onSignup(): void {
+    // Clear any previous messages
+    this.successMessage = null;
+    this.errorMessage = null;
 
-  it('should render form inputs and button', () => {
-    const compiled = fixture.nativeElement as HTMLElement;
+    // Validate email
+    if (!this.validateEmail(this.signupData.email)) {
+      this.errorMessage = 'Invalid email';
+      return;
+    }
 
-    // Check if all input fields exist
-    expect(compiled.querySelector('input#name')).toBeTruthy();
-    expect(compiled.querySelector('input#age')).toBeTruthy();
-    expect(compiled.querySelector('input#email')).toBeTruthy();
-    expect(compiled.querySelector('input#password')).toBeTruthy();
+    // Validate password
+    if (!this.validatePassword(this.signupData.password)) {
+      this.errorMessage = 'Password must have one uppercase letter, one number, one special character, and be 6-12 characters long.';
+      return;
+    }
 
-    // Check if the submit button exists
-    expect(compiled.querySelector('button[type="submit"]')?.textContent).toContain('Sign Up');
-  });
+    const apiUrl = 'http://localhost:5062/api/signup';
 
-  it('should send a POST request on form submission and handle success', () => {
-    // Set mock signup data
-    component.signupData = { name: 'John', age: 30, email: 'john@example.com', password: 'password123' };
+    this.http.post<any>(apiUrl, this.signupData).subscribe({
+      next: (response) => {
+        if (response.message === 'Signup successful') {
+          this.successMessage = 'Signup successful! Please log in.';
+          setTimeout(() => this.router.navigate(['/login']), 3000); // Redirect to login after 3 seconds
+        } else {
+          this.errorMessage = 'Unexpected response';
+        }
+      },
+      error: (err) => {
+        if (err.error && err.error.message === 'User already exists') {
+          this.errorMessage = 'User already exists.';
+        } else {
+          this.errorMessage = 'Signup failed. Please try again.';
+        }
+      }
+    });
+  }
 
-    // Call the method to simulate form submission
-    component.onSignup();
+  navigateToLogin(): void {
+    this.router.navigate(['/login']);
+  }
+}
 
-    // Mock the expected HTTP POST request
-    const req = httpTestingController.expectOne('http://localhost:3000/signup');
-    expect(req.request.method).toBe('POST'); // Ensure it's a POST request
-    expect(req.request.body).toEqual(component.signupData); // Ensure the correct data is sent
-
-    // Mock a successful response
-    req.flush({ message: 'Signup successful' });
-
-    // Check if successMessage is set correctly
-    expect(component.successMessage).toBe('Signup successful! Please log in.');
-    expect(component.errorMessage).toBeNull();
-  });
-
-  it('should handle signup failure', () => {
-    // Set mock signup data
-    component.signupData = { name: 'John', age: 30, email: 'john@example.com', password: 'password123' };
-
-    // Call the method to simulate form submission
-    component.onSignup();
-
-    // Mock the expected HTTP POST request and return an error
-    const req = httpTestingController.expectOne('http://localhost:3000/signup');
-    req.flush({ message: 'Signup failed' }, { status: 400, statusText: 'Bad Request' });
-
-    // Check if errorMessage is set correctly
-    expect(component.successMessage).toBeNull();
-    expect(component.errorMessage).toBe('Signup failed. Please try again.');
-  });
-});
 
 

@@ -22,7 +22,6 @@
         id="title"
         [(ngModel)]="capsule.title"
         name="title"
-        required
         placeholder="Enter capsule title"
       />
     </mat-form-field>
@@ -35,7 +34,6 @@
         id="message"
         [(ngModel)]="capsule.message"
         name="message"
-        required
         rows="4"
         placeholder="Write your message here..."
       ></textarea>
@@ -50,7 +48,6 @@
         id="lockDate"
         [(ngModel)]="capsule.lockDate"
         name="lockDate"
-        required
       />
     </mat-form-field>
 
@@ -62,7 +59,6 @@
         id="recipientUsername"
         [(ngModel)]="capsule.recipientUsername"
         name="recipientUsername"
-        required
         placeholder="Enter recipient username"
       />
     </mat-form-field>
@@ -82,23 +78,15 @@
       </div>
     </div>
 
+    <!-- Error and success messages -->
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+
     <!-- Buttons -->
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      class="login-button"
-      [disabled]="capsuleForm.invalid"
-    >
+    <button mat-raised-button color="primary" type="submit" class="login-button">
       Create Capsule
     </button>
-    <button
-      mat-raised-button
-      color="warn"
-      type="button"
-      class="signup-button"
-      (click)="goBack()"
-    >
+    <button mat-raised-button color="warn" type="button" class="signup-button" (click)="goBack()">
       Go Back
     </button>
   </form>

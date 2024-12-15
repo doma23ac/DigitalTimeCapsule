@@ -41,6 +41,8 @@ export class CreateCapsuleComponent implements OnInit {
   userName: string | null = null;
   availableTags: Tag[] = [];
   selectedTagIDs: number[] = [];
+  errorMessage: string | null = null; // For displaying error messages
+  successMessage: string | null = null; // For displaying success messages
 
   constructor(
     private http: HttpClient,
@@ -81,31 +83,46 @@ export class CreateCapsuleComponent implements OnInit {
   }
 
   onSubmit(): void {
+    // First validate all fields
+    if (!this.validateFields()) return;
+
+    // Then check if recipient exists
+    const userCheckApiUrl = `http://localhost:5062/api/users/${this.capsule.recipientUsername}`;
+
+    this.http.get(userCheckApiUrl).subscribe({
+      next: () => {
+        // If recipient exists, proceed to create the capsule
+        this.createCapsule();
+      },
+      error: (error) => {
+        if (error.status === 404) {
+          this.errorMessage = 'User does not exist.';
+        } else {
+          this.errorMessage = 'User does not exist. Please try again.';
+        }
+        this.successMessage = null; // Clear success message
+      },
+    });
+  }
+
+  createCapsule(): void {
     const apiUrl = 'http://localhost:5062/api/capsules';
 
     this.http.post<any>(apiUrl, this.capsule).subscribe({
       next: (response) => {
-        console.log('Capsule created successfully:', response);
-
         if (response.capsuleID) {
           this.addTagsToCapsule(response.capsuleID);
-          alert('Capsule created successfully!');
+          this.successMessage = 'Capsule created successfully!';
+          this.errorMessage = null; // Clear error message
           this.resetForm();
         } else {
-          console.error('CapsuleID is missing in the response.');
-          alert('Failed to retrieve Capsule ID from the server.');
+          this.errorMessage = 'Failed to create capsule.';
+          this.successMessage = null; // Clear success message
         }
       },
-      error: (error) => {
-        console.error('Error creating capsule:', error);
-
-        if (error.status === 400) {
-          alert('Invalid capsule data. Please check all fields and try again.');
-        } else if (error.status === 404) {
-          alert('User not found. Please check the sender or recipient username.');
-        } else {
-          alert('Failed to create capsule. Please try again later.');
-        }
+      error: () => {
+        this.errorMessage = 'Failed to create capsule. Please try again.';
+        this.successMessage = null; // Clear success message
       },
     });
   }
@@ -125,6 +142,19 @@ export class CreateCapsuleComponent implements OnInit {
     });
   }
 
+  validateFields(): boolean {
+    const { title, message, lockDate, recipientUsername } = this.capsule;
+
+    if (!title || !message || !lockDate || !recipientUsername) {
+      this.errorMessage = 'Fill out all fields.';
+      this.successMessage = null; // Clear success message
+      return false;
+    }
+
+    this.errorMessage = null; // Clear error message if fields are valid
+    return true;
+  }
+
   goBack(): void {
     this.location.back();
   }
@@ -141,5 +171,4 @@ export class CreateCapsuleComponent implements OnInit {
     this.selectedTagIDs = [];
   }
 }
-
 

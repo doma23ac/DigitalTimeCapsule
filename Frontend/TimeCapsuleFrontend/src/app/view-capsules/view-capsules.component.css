@@ -1,4 +1,4 @@
-/* Background video styling */
+/* Background Video */
 .background-video-container {
   position: fixed;
   top: 0;
@@ -14,39 +14,164 @@
   object-fit: cover;
 }
 
-/* Capsules container styling */
-.capsules-container {
-  max-width: 900px;
-  margin: 2rem auto;
-  background-color: rgba(169, 169, 169, 0.6);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Tag filter container styling */
-.filter-container {
-  margin-bottom: 1.5rem;
+/* Header Section */
+.header-container {
   text-align: center;
+  margin-bottom: 20px;
 }
 
-.tag-checkbox-container {
+.header {
+  font-size: 3rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+/* Filter Section */
+.filter-container {
+  text-align: center;
+  padding: 20px;
+  margin: 20px auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  width: 80%; /* Adaptable width */
+}
+
+.filter-header {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 10px;
+}
+
+.tags-container {
   display: flex;
   flex-wrap: wrap;
+  gap: 15px;
   justify-content: center;
-  gap: 10px;
 }
 
 .tag-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+}
+
+.tag-label {
+  font-size: 1rem;
+}
+
+/* Capsules Container */
+.capsules-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1100px; /* Allow overriding width */
+  margin: 0 auto;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Capsule Item */
+.capsule-item {
+  width: 90%; /* Capsule fits within container */
+  max-width: 1000px;
+  background-color: rgba(240, 240, 240, 0.8);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.capsule-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Capsule Header */
+.capsule-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.capsule-title {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+/* Tags Section */
+.capsule-tags {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.tags-list {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 0;
+  margin: 0;
+}
+
+.tag-item {
+  background-color: rgba(200, 200, 200, 0.8);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+/* Capsule Subtitle */
+.capsule-subtitle {
+  font-size: 1rem;
+  color: #666;
+  text-align: center;
+}
+
+/* Buttons Section */
+.capsule-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.toggle-button {
+  padding: 10px 20px;
+  background-color: rgba(169, 169, 169, 0.6);
+  color: white;
+  border-radius: 8px;
+}
+
+.toggle-button:hover {
+  background-color: rgba(169, 169, 169, 0.8);
+}
+
+/* Message Box */
+.capsule-message-box {
+  background-color: #f5f5dc;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.capsule-message {
   font-size: 1rem;
   color: #333;
 }
 
-/* Capsule styles */
-.capsule-item {
-  background-color: rgba(240, 240, 240, 0.9);
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.delete-button {
+  margin-top: 10px;
+  background-color: #ff4d4d; /* Default red background */
+  color: white; /* White text */
+  border: none; /* Ensure no border is added */
+  border-radius: 8px; /* Rounded corners */
+  transition: background-color 0.3s ease; /* Smooth hover transition */
 }
+
+.delete-button:hover {
+  background-color: #ff1a1a; /* Darker red on hover */
+}
+

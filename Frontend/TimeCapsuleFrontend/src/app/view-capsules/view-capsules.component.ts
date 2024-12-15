@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatCheckboxModule, MatCheckboxChange } from '@angular/material/checkbox'; // Correct import
 
 export interface Capsule {
   capsuleID: number;
@@ -34,6 +35,7 @@ export interface Tag {
     MatCardModule,
     MatIconModule,
     MatChipsModule,
+    MatCheckboxModule, // Include MatCheckboxModule
   ],
   templateUrl: './view-capsules.component.html',
   styleUrls: ['./view-capsules.component.css'],
@@ -46,7 +48,7 @@ export class ViewCapsulesComponent implements OnInit {
   expandedCapsuleID: number | null = null;
 
   availableTags: Tag[] = [];
-  selectedTags: number[] = []; // Array of selected tag IDs for filtering
+  selectedTags: number[] = [];
 
   private apiUrl = 'http://localhost:5062/api/capsules';
 
@@ -86,7 +88,6 @@ export class ViewCapsulesComponent implements OnInit {
     this.http.get<Tag[]>(tagsApiUrl).subscribe({
       next: (tags) => {
         capsule.tags = tags;
-        // Update available tags with unique tags
         tags.forEach((tag) => {
           if (!this.availableTags.some((t) => t.tagID === tag.tagID)) {
             this.availableTags.push(tag);
@@ -100,23 +101,12 @@ export class ViewCapsulesComponent implements OnInit {
     });
   }
 
-  /**
-   * Handles changes in the tag checkboxes.
-   * @param event The change event from the checkbox.
-   */
-  onTagCheckboxChange(event: Event) {
-    const checkbox = event.target as HTMLInputElement;
-    const tagID = Number(checkbox.value);
-
-    if (checkbox.checked) {
-      // Add tagID to the selectedTags array
+  onTagCheckboxChange(tagID: number, event: MatCheckboxChange) {
+    if (event.checked) {
       this.selectedTags.push(tagID);
     } else {
-      // Remove tagID from the selectedTags array
       this.selectedTags = this.selectedTags.filter((id) => id !== tagID);
     }
-
-    // Reapply filter
     this.filterCapsules();
   }
 

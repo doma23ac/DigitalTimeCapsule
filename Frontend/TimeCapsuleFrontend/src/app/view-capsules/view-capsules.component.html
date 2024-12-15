@@ -8,58 +8,70 @@
   </iframe>
 </div>
 
-<div class="capsules-container">
+<div class="header-container">
   <h1 class="header">Capsules Ready to Open</h1>
-  
-  <p *ngIf="error" class="error">{{ error }}</p>
+</div>
 
-  <!-- Checkbox Filter Section -->
-  <div class="filter-container">
-    <h2>Select Tags to Filter</h2>
-    <div class="tag-checkbox-container">
-      <label *ngFor="let tag of availableTags" class="tag-checkbox">
-        <input
-          type="checkbox"
-          [value]="tag.tagID"
-          (change)="onTagCheckboxChange($event)"
-        />
-        {{ tag.tagName }}
-      </label>
-    </div>
-  </div>
-
-  <!-- Capsules Display -->
-  <div *ngIf="filteredCapsules.length === 0">
-    <p>No capsules match your selected tags.</p>
-  </div>
-
-  <div *ngIf="filteredCapsules.length > 0">
-    <mat-card *ngFor="let capsule of filteredCapsules" class="capsule-item">
-      <mat-card-header>
-        <mat-card-title>{{ capsule.title }}</mat-card-title>
-        <mat-card-subtitle>
-          Sender: {{ capsule.senderUsername }} | Lock Date: {{ capsule.lockDate | date }}
-        </mat-card-subtitle>
-      </mat-card-header>
-
-      <div class="tags-container">
-        <span *ngFor="let tag of capsule.tags" class="tag-bubble">{{ tag.tagName }}</span>
-      </div>
-
-      <button mat-raised-button class="toggle-btn" (click)="toggleCapsuleMessage(capsule.capsuleID)">
-        {{ expandedCapsuleID === capsule.capsuleID ? 'Hide Message' : 'Show Message' }}
-      </button>
-
-      <div *ngIf="expandedCapsuleID === capsule.capsuleID" class="capsule-message">
-        <p><strong>Message:</strong> {{ capsule.message }}</p>
-        <button mat-raised-button color="warn" class="delete-btn" (click)="deleteCapsule(capsule.capsuleID)">
-          Delete Capsule
-        </button>
-      </div>
-    </mat-card>
+<!-- Filter Section -->
+<div class="filter-container">
+  <h2 class="filter-header">Filter by Tags</h2>
+  <div class="tags-container">
+    <mat-checkbox
+      *ngFor="let tag of availableTags"
+      class="tag-checkbox"
+      [checked]="selectedTags.includes(tag.tagID)"
+      (change)="onTagCheckboxChange(tag.tagID, $event)">
+      <span class="tag-label">{{ tag.tagName }}</span>
+    </mat-checkbox>
   </div>
 </div>
 
-  
-  
-  
+<!-- Capsules Section -->
+<div class="capsules-container">
+  <p *ngIf="filteredCapsules.length === 0" class="no-capsules">
+    No capsules match your selected tags.
+  </p>
+
+  <div *ngFor="let capsule of filteredCapsules" class="capsule-item">
+    <!-- Capsule Header -->
+    <div class="capsule-header">
+      <h3 class="capsule-title">{{ capsule.title }}</h3>
+    </div>
+
+    <!-- Tags Section -->
+    <div class="capsule-tags">
+      <ul class="tags-list">
+        <li *ngFor="let tag of capsule.tags" class="tag-item">{{ tag.tagName }}</li>
+      </ul>
+    </div>
+
+    <!-- Capsule Subtitle -->
+    <p class="capsule-subtitle">
+      Sender: {{ capsule.senderUsername }} | Lock Date: {{ capsule.lockDate | date }}
+    </p>
+
+    <!-- Capsule Buttons -->
+    <div class="capsule-buttons">
+      <button
+        mat-raised-button
+        class="toggle-button"
+        (click)="toggleCapsuleMessage(capsule.capsuleID)">
+        {{ expandedCapsuleID === capsule.capsuleID ? 'Hide Message' : 'Show Message' }}
+      </button>
+    </div>
+
+    <!-- Unfolded Message Box -->
+    <div *ngIf="expandedCapsuleID === capsule.capsuleID" class="capsule-message-box">
+      <div class="capsule-message">
+        <p><strong>Message:</strong> {{ capsule.message }}</p>
+        <button
+          mat-raised-button
+          color="warn"
+          class="delete-button"
+          (click)="deleteCapsule(capsule.capsuleID)">
+          Delete Capsule
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

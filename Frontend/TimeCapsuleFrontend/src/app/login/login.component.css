@@ -30,22 +30,26 @@
     border-radius: 5px;
   }
   
-  /* Button styles */
-  .login-button,
-  .signup-button {
-    background-color: rgba(169, 169, 169, 0.6); /* Grey with transparency */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 1rem;
-  }
-  
-  .login-button:hover,
-  .signup-button:hover {
-    background-color: rgba(169, 169, 169, 0.8); /* Darker grey on hover */
-    color: white;
-  }
+ /* Button styles scoped to .login-form */
+.login-form .login-button,
+.login-form .signup-button {
+  background-color: rgba(169, 169, 169, 0.6); /* Grey with transparency */
+  color: white;
+  border: none; /* Remove any borders */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px; /* Padding inside buttons */
+  font-size: 1rem; /* Font size for button text */
+  width: 100%; /* Full-width button */
+  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transition */
+}
+
+/* Hover styles for buttons */
+.login-form .login-button:hover,
+.login-form .signup-button:hover {
+  background-color: rgba(169, 169, 169, 0.8); /* Darker grey on hover */
+  color: white; /* Ensure text remains white */
+}
   
   /* Styling for the welcome message */
   .welcome-message-container {
@@ -56,8 +60,7 @@
   .welcome-message {
     font-size: 3rem; /* Large font size */
     color: rgba(169, 169, 169, 0.8); /* Grey color with half transparency */
-    font-family: 'Roboto', sans-serif; /* Clean font family */
-    font-weight: 300; /* Lighter font weight for a modern look */
+    
     margin: 0;
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for better visibility */
   }

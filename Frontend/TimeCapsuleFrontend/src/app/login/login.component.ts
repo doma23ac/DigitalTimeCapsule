@@ -38,7 +38,7 @@ export class LoginComponent {
         }
       },
       error: () => {
-        this.errorMessage = 'Login failed';
+        this.errorMessage = 'Email-address or password is wrong. Try again.';
       }
     });
   }

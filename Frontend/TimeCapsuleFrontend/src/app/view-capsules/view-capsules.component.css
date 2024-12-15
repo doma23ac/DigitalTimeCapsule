@@ -71,6 +71,8 @@
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative; /* Ensure it doesn’t overlap */
+  z-index: 1; /* Keep capsules below the "Go Back" button */
 }
 
 /* Capsule Item */
@@ -175,3 +177,41 @@
   background-color: #ff1a1a; /* Darker red on hover */
 }
 
+/* Back Button Container */
+.back-button-container {
+  text-align: center; /* Center align */
+  margin-top: 20px; /* Space above the button */
+  margin-bottom: 20px; /* Space below the button */
+  position: relative; /* Ensure container respects normal document flow */
+  z-index: 10; /* Ensure it is layered above capsules-container */
+}
+
+/* Back Button Container */
+.back-button-container {
+  text-align: center; /* Center align */
+  margin-top: 20px; /* Space above the button */
+  margin-bottom: 20px; /* Space below the button */
+  position: relative; /* Ensure container respects normal document flow */
+  z-index: 10; /* Ensure it is layered above capsules-container */
+}
+
+/* Go Back Button Styles */
+.go-back-button {
+  background-color: rgba(169, 169, 169, 0.6) !important; /* Default semi-transparent grey */
+  color: white !important; /* Ensure text is visible */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners for smoothness */
+  padding: 10px 20px; /* Padding for better touch area */
+  font-size: 1rem; /* Font size for text */
+  text-align: center; /* Center align button text */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transition */
+  display: inline-block; /* Ensure consistent rendering */
+  box-shadow: none; /* Remove Material default shadow */
+  position: relative; /* Ensure button respects container layering */
+}
+
+/* Hover effect for the button */
+.go-back-button:hover {
+  background-color: rgba(169, 169, 169, 0.8) !important; /* Darker grey when hovered */
+  color: white !important; /* Ensure text remains white */
+}

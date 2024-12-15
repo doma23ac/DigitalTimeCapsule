@@ -6,7 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatCheckboxModule, MatCheckboxChange } from '@angular/material/checkbox'; // Correct import
+import { MatCheckboxModule, MatCheckboxChange } from '@angular/material/checkbox';
+import { Router } from '@angular/router'; // Import Router
 
 export interface Capsule {
   capsuleID: number;
@@ -35,7 +36,7 @@ export interface Tag {
     MatCardModule,
     MatIconModule,
     MatChipsModule,
-    MatCheckboxModule, // Include MatCheckboxModule
+    MatCheckboxModule,
   ],
   templateUrl: './view-capsules.component.html',
   styleUrls: ['./view-capsules.component.css'],
@@ -52,7 +53,11 @@ export class ViewCapsulesComponent implements OnInit {
 
   private apiUrl = 'http://localhost:5062/api/capsules';
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+    private router: Router // Inject Router
+  ) {}
 
   ngOnInit() {
     const user = this.userService.getUser();
@@ -147,5 +152,9 @@ export class ViewCapsulesComponent implements OnInit {
         },
       });
     }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/personal']); // Route to '/personal'
   }
 }

@@ -1,142 +1,52 @@
-/* Ensure the YouTube video covers the whole background */
+/* Background video styling */
 .background-video-container {
-  position: fixed; /* Fix the video to the background */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* Ensure the video stays behind the content */
+  z-index: -1;
 }
 
 .background-video {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  border: none;
-  object-fit: cover; /* Ensure the video fills the screen */
+  object-fit: cover;
 }
 
-/* Styling for the capsules container */
+/* Capsules container styling */
 .capsules-container {
   max-width: 900px;
   margin: 2rem auto;
+  background-color: rgba(169, 169, 169, 0.6);
+  border-radius: 8px;
   padding: 1.5rem;
-  background-color: rgba(169, 169, 169, 0.6);  /* Semi-transparent grey */
-  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
 }
 
-/* Header styling */
-.header {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  text-align: center;
-  color: #333;
-}
-
-/* Error message styling */
-.error {
-  color: red;
-  text-align: center;
-}
-
-/* No capsules available message */
-.no-capsules {
-  text-align: center;
-  font-size: 1rem;
-  color: #666;
-}
-
-/* Capsules list layout */
-.capsules-list {
-  display: flex;
-  flex-wrap: wrap; /* Allow cards to wrap */
-  gap: 20px; /* Space between the capsules */
-  justify-content: center; /* Center the items */
-}
-
-/* Capsule card styling */
-.capsule-item {
-  flex: 1 1 calc(33% - 20px); /* Responsive layout (3 columns) */
+/* Tag filter container styling */
+.filter-container {
   margin-bottom: 1.5rem;
-  background-color: rgba(169, 169, 169, 0.6); /* Semi-transparent grey background for capsules */
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  text-align: center;
 }
 
-.capsule-item:hover {
-  background-color: rgba(169, 169, 169, 0.8); /* Darker grey on hover */
-}
-
-/* Capsule details */
-.capsule-details {
-  margin-bottom: 0.5rem;
-  line-height: 1.5;
-  color: #333;
-}
-
-/* Styling for tags */
-.tags-container {
-  margin-top: 0.5rem;
+.tag-checkbox-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 10px;
 }
 
-.tag-bubble {
-  background-color: #ffffff; /* White background for tags */
-  color: #007bff; /* Blue text color */
-  padding: 0.3rem 0.8rem;
-  border-radius: 15px; /* Rounded corners for bubble effect */
-  font-size: 0.85rem;
-  font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for the tags */
-}
-
-/* Button styling */
-.toggle-btn, .open-btn {
-  background-color: rgba(169, 169, 169, 0.6); /* Semi-transparent grey background */
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
+.tag-checkbox {
   font-size: 1rem;
-  transition: background-color 0.3s ease;
+  color: #333;
 }
 
-.toggle-btn:hover, .open-btn:hover {
-  background-color: rgba(169, 169, 169, 0.8); /* Darker grey on hover */
-}
-
-.capsule-message {
-  margin-top: 1rem;
-  padding: 0.5rem;
-  background-color: rgba(240, 240, 240, 0.8); /* Light grey background for capsule message */
-  border-left: 4px solid #007bff; /* Blue left border */
-}
-
-/* Material button styles */
-mat-card-header {
-  background-color: transparent; /* No background for card header */
-  border-radius: 6px;
-}
-.delete-btn {
-  background-color: #ff4d4d; /* Red for delete action */
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-.delete-btn:hover {
-  background-color: #ff1a1a; /* Darker red on hover */
+/* Capsule styles */
+.capsule-item {
+  background-color: rgba(240, 240, 240, 0.9);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

@@ -40,11 +40,15 @@ export interface Tag {
 })
 export class ViewCapsulesComponent implements OnInit {
   capsules: Capsule[] = [];
+  filteredCapsules: Capsule[] = [];
   error: string | null = null;
   userID: number | null = null;
   expandedCapsuleID: number | null = null;
 
-  private apiUrl = 'http://localhost:5062/api/capsules'; // Replace with your actual endpoint
+  availableTags: Tag[] = [];
+  selectedTags: number[] = []; // Array of selected tag IDs for filtering
+
+  private apiUrl = 'http://localhost:5062/api/capsules';
 
   constructor(private http: HttpClient, private userService: UserService) {}
 
@@ -68,6 +72,7 @@ export class ViewCapsulesComponent implements OnInit {
             new Date(capsule.lockDate) <= today
         );
         this.capsules.forEach((capsule) => this.fetchTagsForCapsule(capsule));
+        this.filteredCapsules = [...this.capsules];
       },
       error: (err) => {
         console.error('Error fetching capsules:', err);
@@ -79,7 +84,15 @@ export class ViewCapsulesComponent implements OnInit {
   fetchTagsForCapsule(capsule: Capsule) {
     const tagsApiUrl = `http://localhost:5062/api/capsuletags/${capsule.capsuleID}`;
     this.http.get<Tag[]>(tagsApiUrl).subscribe({
-      next: (tags) => (capsule.tags = tags),
+      next: (tags) => {
+        capsule.tags = tags;
+        // Update available tags with unique tags
+        tags.forEach((tag) => {
+          if (!this.availableTags.some((t) => t.tagID === tag.tagID)) {
+            this.availableTags.push(tag);
+          }
+        });
+      },
       error: (err) => {
         console.error(`Error fetching tags for capsule ${capsule.capsuleID}:`, err);
         capsule.tags = [];
@@ -87,10 +100,39 @@ export class ViewCapsulesComponent implements OnInit {
     });
   }
 
-  // Add the toggleCapsuleMessage method here
+  /**
+   * Handles changes in the tag checkboxes.
+   * @param event The change event from the checkbox.
+   */
+  onTagCheckboxChange(event: Event) {
+    const checkbox = event.target as HTMLInputElement;
+    const tagID = Number(checkbox.value);
+
+    if (checkbox.checked) {
+      // Add tagID to the selectedTags array
+      this.selectedTags.push(tagID);
+    } else {
+      // Remove tagID from the selectedTags array
+      this.selectedTags = this.selectedTags.filter((id) => id !== tagID);
+    }
+
+    // Reapply filter
+    this.filterCapsules();
+  }
+
+  filterCapsules() {
+    if (this.selectedTags.length === 0) {
+      this.filteredCapsules = [...this.capsules];
+    } else {
+      this.filteredCapsules = this.capsules.filter((capsule) =>
+        capsule.tags?.some((tag) => this.selectedTags.includes(tag.tagID))
+      );
+    }
+  }
+
   toggleCapsuleMessage(capsuleID: number) {
-    // Toggle the expanded state of the capsule
-    this.expandedCapsuleID = this.expandedCapsuleID === capsuleID ? null : capsuleID;
+    this.expandedCapsuleID =
+      this.expandedCapsuleID === capsuleID ? null : capsuleID;
   }
 
   deleteCapsule(capsuleID: number) {
@@ -102,7 +144,12 @@ export class ViewCapsulesComponent implements OnInit {
       this.http.delete(`${this.apiUrl}/${capsuleID}`).subscribe({
         next: () => {
           alert('Capsule deleted successfully.');
-          this.capsules = this.capsules.filter((capsule) => capsule.capsuleID !== capsuleID);
+          this.capsules = this.capsules.filter(
+            (capsule) => capsule.capsuleID !== capsuleID
+          );
+          this.filteredCapsules = this.filteredCapsules.filter(
+            (capsule) => capsule.capsuleID !== capsuleID
+          );
         },
         error: (err) => {
           console.error('Error deleting capsule:', err);

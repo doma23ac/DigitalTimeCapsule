@@ -60,5 +60,22 @@ public class UsersController : ControllerBase
         }
         return BadRequest("Failed to delete user.");
     }
+    [HttpGet("by-username/{username}")]
+public IActionResult GetUserByUsername(string username)
+{
+    if (string.IsNullOrEmpty(username))
+    {
+        return BadRequest("Username cannot be null or empty.");
+    }
+
+    var user = _userRepository.GetUserByUsername(username);
+    if (user == null)
+    {
+        return NotFound($"User with username '{username}' not found.");
+    }
+
+    return Ok(user);
+}
+
 }
 

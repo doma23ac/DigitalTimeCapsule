@@ -43,6 +43,7 @@ export class CreateCapsuleComponent implements OnInit {
   selectedTagIDs: number[] = [];
   errorMessage: string | null = null; // For displaying error messages
   successMessage: string | null = null; // For displaying success messages
+  minDate: string = ''; // For restricting date selection to future dates
 
   constructor(
     private http: HttpClient,
@@ -60,6 +61,12 @@ export class CreateCapsuleComponent implements OnInit {
     }
 
     this.fetchAvailableTags();
+    this.setMinDate(); // Set the minimum selectable date
+  }
+
+  setMinDate(): void {
+    const today = new Date();
+    this.minDate = today.toISOString().split('T')[0]; // Format date as yyyy-MM-dd
   }
 
   fetchAvailableTags(): void {
@@ -83,46 +90,31 @@ export class CreateCapsuleComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // Validate fields before making any API calls
     if (!this.validateFields()) return;
-  
-     const userCheckApiUrl = `http://localhost:5062/api/users/by-username/${encodeURIComponent(this.capsule.recipientUsername)}`;
 
-  
-    // Check if recipient exists
+    const userCheckApiUrl = `http://localhost:5062/api/users/by-username/${encodeURIComponent(this.capsule.recipientUsername)}`;
+
     this.http.get(userCheckApiUrl).subscribe({
       next: (response: any) => {
-        console.log('User check response:', response); // Debugging log
-  
-        // If response is valid, proceed to create the capsule
         if (response && response.username) {
           this.createCapsule();
         } else {
-          // Handle unexpected responses gracefully
           this.errorMessage = 'Unexpected response. Please try again.';
-          this.successMessage = null; // Clear success message
+          this.successMessage = null;
         }
       },
       error: (error) => {
-        console.error('Error during user check:', error); // Debugging log
-  
         if (error.status === 400) {
-          // Handle specific 400 error
           this.errorMessage = 'Invalid request. Please check the username.';
         } else if (error.status === 404) {
-          // Handle 404 (user not found)
           this.errorMessage = 'User does not exist.';
         } else {
-          // Handle other errors
           this.errorMessage = 'An error occurred. Please try again later.';
         }
-  
-        this.successMessage = null; // Clear success message
+        this.successMessage = null;
       },
     });
   }
-  
-  
 
   createCapsule(): void {
     const apiUrl = 'http://localhost:5062/api/capsules';
@@ -132,16 +124,16 @@ export class CreateCapsuleComponent implements OnInit {
         if (response.capsuleID) {
           this.addTagsToCapsule(response.capsuleID);
           this.successMessage = 'Capsule created successfully!';
-          this.errorMessage = null; // Clear error message
+          this.errorMessage = null;
           this.resetForm();
         } else {
           this.errorMessage = 'Failed to create capsule.';
-          this.successMessage = null; // Clear success message
+          this.successMessage = null;
         }
       },
       error: () => {
         this.errorMessage = 'Failed to create capsule. Please try again.';
-        this.successMessage = null; // Clear success message
+        this.successMessage = null;
       },
     });
   }
@@ -166,11 +158,11 @@ export class CreateCapsuleComponent implements OnInit {
 
     if (!title || !message || !lockDate || !recipientUsername) {
       this.errorMessage = 'Fill out all fields.';
-      this.successMessage = null; // Clear success message
+      this.successMessage = null;
       return false;
     }
 
-    this.errorMessage = null; // Clear error message if fields are valid
+    this.errorMessage = null;
     return true;
   }
 
@@ -190,4 +182,3 @@ export class CreateCapsuleComponent implements OnInit {
     this.selectedTagIDs = [];
   }
 }
-

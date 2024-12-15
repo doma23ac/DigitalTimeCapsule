@@ -40,16 +40,20 @@
     </mat-form-field>
 
     <!-- Date to Open -->
-    <mat-form-field class="input-field" floatLabel="always">
-      <mat-label>Date to Open</mat-label>
-      <input
-        matInput
-        type="date"
-        id="lockDate"
-        [(ngModel)]="capsule.lockDate"
-        name="lockDate"
-      />
-    </mat-form-field>
+   <!-- Date to Open -->
+<mat-form-field class="input-field" floatLabel="always">
+  <mat-label>Date to Open</mat-label>
+  <input
+    matInput
+    type="date"
+    id="lockDate"
+    [(ngModel)]="capsule.lockDate"
+    name="lockDate"
+    [min]="minDate" 
+    required
+  />
+</mat-form-field>
+
 
     <!-- Recipient -->
     <mat-form-field class="input-field" floatLabel="always">

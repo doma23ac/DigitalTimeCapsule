@@ -68,21 +68,31 @@ button {
   margin-top: 10px;
 }
 
+/* Button styles for submit and go back */
 .login-button,
 .signup-button {
-  background-color: rgba(169, 169, 169, 0.6);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 1rem;
-  text-align: center;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: rgba(169, 169, 169, 0.6); /* Default semi-transparent grey */
+  color: white; /* White text */
+  border: none; /* Remove any borders */
+  border-radius: 5px; /* Rounded corners for smoothness */
+  padding: 10px; /* Padding for better touch area */
+  font-size: 1rem; /* Font size for button text */
+  text-align: center; /* Center align button text */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transition */
+  display: inline-block; /* Consistent rendering */
 }
 
+/* Hover effect for buttons */
 .login-button:hover,
 .signup-button:hover {
   background-color: rgba(169, 169, 169, 0.8); /* Slightly darker grey on hover */
+  color: white; /* Ensure text remains white */
+}
+
+/* Ensure the default background and transparency remain when not hovered */
+.login-button:not(:hover),
+.signup-button:not(:hover) {
+  background-color: rgba(169, 169, 169, 0.6); /* Default semi-transparent grey */
 }
 
 /* Tags Section */

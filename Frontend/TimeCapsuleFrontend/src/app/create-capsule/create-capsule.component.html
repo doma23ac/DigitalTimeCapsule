@@ -1,20 +1,36 @@
-<form (ngSubmit)="onSubmit()" #capsuleForm="ngForm">
-  <div>
-    <h1>Create Capsule</h1>
-    <p>Welcome, {{ userName }}!</p>
-    <div class="form-group">
-      <label for="title">Title</label>
+<!-- Background YouTube Video -->
+<div class="background-video-container">
+  <iframe class="background-video"
+    src="https://www.youtube.com/embed/_o7VAA57Zv8?autoplay=1&mute=1&controls=0&loop=1&playlist=_o7VAA57Zv8"
+    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+  </iframe>
+</div>
+
+<form (ngSubmit)="onSubmit()" #capsuleForm="ngForm" class="create-capsule">
+  <h1>Create Capsule</h1>
+  <p>Welcome, {{ userName }}!</p>
+
+  <!-- Title -->
+  <div class="form-group">
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Title</mat-label>
       <input
+        matInput
         id="title"
         [(ngModel)]="capsule.title"
         name="title"
         required
         placeholder="Enter capsule title"
       />
-    </div>
-    <div class="form-group">
-      <label for="message">Your Message</label>
+    </mat-form-field>
+  </div>
+
+  <!-- Message -->
+  <div class="form-group">
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Your Message</mat-label>
       <textarea
+        matInput
         id="message"
         [(ngModel)]="capsule.message"
         name="message"
@@ -22,46 +38,73 @@
         rows="4"
         placeholder="Write your message here..."
       ></textarea>
-    </div>
-    <div class="form-group">
-      <label for="lockDate">Date to Open</label>
+    </mat-form-field>
+  </div>
+
+  <!-- Date to Open -->
+  <div class="form-group">
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Date to Open</mat-label>
       <input
+        matInput
         type="date"
         id="lockDate"
         [(ngModel)]="capsule.lockDate"
         name="lockDate"
         required
       />
-    </div>
-    <div class="form-group">
-      <label for="recipientUsername">Receiver</label>
+    </mat-form-field>
+  </div>
+
+  <!-- Recipient -->
+  <div class="form-group">
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Receiver</mat-label>
       <input
+        matInput
         id="recipientUsername"
         [(ngModel)]="capsule.recipientUsername"
         name="recipientUsername"
         required
         placeholder="Enter recipient username"
       />
-    </div>
+    </mat-form-field>
+  </div>
 
-    <!-- New Section for Tag Selection -->
-    <div class="form-group">
-      <label>Select Tags</label>
-      <div class="tags-container">
-        <div *ngFor="let tag of availableTags" class="tag">
-          <input
-            type="checkbox"
-            [id]="'tag-' + tag.tagID"
-            [value]="tag.tagID"
-            (change)="onTagSelection(tag.tagID)"
-          />
-          <label [for]="'tag-' + tag.tagID">{{ tag.tagName }}</label>
-        </div>
-      </div>
+  <!-- Tags -->
+  <div class="form-group tags-section">
+    <label class="tags-label">Select Tags</label>
+    <div class="tags-container">
+      <mat-checkbox
+        *ngFor="let tag of availableTags"
+        class="tag-checkbox"
+        [checked]="selectedTagIDs.includes(tag.tagID)"
+        (change)="onTagSelection(tag.tagID)"
+      >
+        {{ tag.tagName }}
+      </mat-checkbox>
     </div>
+  </div>
 
-    <button type="submit">Create Capsule</button>
-    <button type="button" (click)="goBack()">Go Back</button>
+  <!-- Buttons -->
+  <div class="form-actions">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      class="submit-button"
+      [disabled]="capsuleForm.invalid"
+    >
+      Create Capsule
+    </button>
+    <button
+      mat-raised-button
+      color="warn"
+      type="button"
+      class="back-button"
+      (click)="goBack()"
+    >
+      Go Back
+    </button>
   </div>
 </form>
-

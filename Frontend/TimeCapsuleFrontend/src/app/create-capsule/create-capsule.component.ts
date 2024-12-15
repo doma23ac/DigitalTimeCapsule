@@ -3,6 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { UserService } from '../user.service';
 
 export interface Tag {
@@ -15,21 +19,28 @@ export interface Tag {
   standalone: true,
   templateUrl: './create-capsule.component.html',
   styleUrls: ['./create-capsule.component.css'],
-  imports: [FormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCheckboxModule,
+  ],
 })
 export class CreateCapsuleComponent implements OnInit {
   capsule = {
     title: '',
     message: '',
     lockDate: '',
-    status: 'Open', // Default status
+    status: 'Open',
     senderUsername: '',
     recipientUsername: ''
   };
 
   userName: string | null = null;
-  availableTags: Tag[] = []; // Store available tags
-  selectedTagIDs: number[] = []; // Store selected tag IDs
+  availableTags: Tag[] = [];
+  selectedTagIDs: number[] = [];
 
   constructor(
     private http: HttpClient,
@@ -40,8 +51,8 @@ export class CreateCapsuleComponent implements OnInit {
   ngOnInit(): void {
     const user = this.userService.getUser();
     if (user && user.username) {
-      this.userName = user.username; // Set the user's name
-      this.capsule.senderUsername = user.username; // Set the sender username
+      this.userName = user.username;
+      this.capsule.senderUsername = user.username;
     } else {
       console.warn('User is not logged in or username is missing.');
     }
@@ -50,40 +61,34 @@ export class CreateCapsuleComponent implements OnInit {
   }
 
   fetchAvailableTags(): void {
-    const tagsApiUrl = 'http://localhost:5062/api/tags'; // Replace with your endpoint
+    const tagsApiUrl = 'http://localhost:5062/api/tags';
     this.http.get<Tag[]>(tagsApiUrl).subscribe({
       next: (data) => {
         this.availableTags = data;
       },
       error: (err) => {
         console.error('Error fetching tags:', err);
-      }
+      },
     });
   }
 
   onTagSelection(tagID: number): void {
     if (this.selectedTagIDs.includes(tagID)) {
-      // Remove the tag if it's already selected
       this.selectedTagIDs = this.selectedTagIDs.filter((id) => id !== tagID);
     } else {
-      // Add the tag if it's not selected
       this.selectedTagIDs.push(tagID);
     }
   }
 
   onSubmit(): void {
-    const apiUrl = 'http://localhost:5062/api/capsules'; // Capsule creation endpoint
-  
-    // Step 1: Create the capsule
+    const apiUrl = 'http://localhost:5062/api/capsules';
+
     this.http.post<any>(apiUrl, this.capsule).subscribe({
       next: (response) => {
         console.log('Capsule created successfully:', response);
-  
+
         if (response.capsuleID) {
-          const capsuleID = response.capsuleID;
-  
-          // Step 2: Associate tags with the created capsule
-          this.addTagsToCapsule(capsuleID);
+          this.addTagsToCapsule(response.capsuleID);
           alert('Capsule created successfully!');
           this.resetForm();
         } else {
@@ -93,7 +98,7 @@ export class CreateCapsuleComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error creating capsule:', error);
-  
+
         if (error.status === 400) {
           alert('Invalid capsule data. Please check all fields and try again.');
         } else if (error.status === 404) {
@@ -106,7 +111,7 @@ export class CreateCapsuleComponent implements OnInit {
   }
 
   addTagsToCapsule(capsuleID: number): void {
-    const capsuleTagsApiUrl = 'http://localhost:5062/api/capsuletags'; // Capsule tags endpoint
+    const capsuleTagsApiUrl = 'http://localhost:5062/api/capsuletags';
 
     this.selectedTagIDs.forEach((tagID) => {
       this.http.post(`${capsuleTagsApiUrl}/${capsuleID}/${tagID}`, {}).subscribe({
@@ -130,10 +135,10 @@ export class CreateCapsuleComponent implements OnInit {
       message: '',
       lockDate: '',
       status: 'Open',
-      senderUsername: this.userName || '', // Keep the senderUsername intact
+      senderUsername: this.userName || '',
       recipientUsername: ''
     };
-    this.selectedTagIDs = []; // Reset selected tags
+    this.selectedTagIDs = [];
   }
 }
 

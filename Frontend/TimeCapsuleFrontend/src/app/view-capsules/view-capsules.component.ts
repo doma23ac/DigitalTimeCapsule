@@ -73,13 +73,13 @@ export class ViewCapsulesComponent implements OnInit {
     this.http.get<Capsule[]>(this.apiUrl).subscribe({
       next: (data) => {
         const today = new Date();
-        this.capsules = data.filter(
+        this.capsules = data; // Store all capsules, regardless of lockDate
+        this.filteredCapsules = data.filter(
           (capsule) =>
             capsule.recipientID === this.userID &&
-            new Date(capsule.lockDate) <= today
+            new Date(capsule.lockDate) <= today // Capsules ready to open
         );
         this.capsules.forEach((capsule) => this.fetchTagsForCapsule(capsule));
-        this.filteredCapsules = [...this.capsules];
       },
       error: (err) => {
         console.error('Error fetching capsules:', err);
@@ -87,6 +87,7 @@ export class ViewCapsulesComponent implements OnInit {
       },
     });
   }
+  
 
   fetchTagsForCapsule(capsule: Capsule) {
     const tagsApiUrl = `http://localhost:5062/api/capsuletags/${capsule.capsuleID}`;
@@ -157,4 +158,9 @@ export class ViewCapsulesComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/personal']); // Route to '/personal'
   }
+  getLockedCapsulesCount(): number {
+    const today = new Date();
+    return this.capsules.filter((capsule) => new Date(capsule.lockDate) > today).length;
+  }
+  
 }

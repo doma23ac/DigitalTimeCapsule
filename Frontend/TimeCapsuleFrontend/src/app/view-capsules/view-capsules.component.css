@@ -26,6 +26,17 @@
   margin: 0;
 }
 
+/* Inspiring Text */
+.inspiring-text {
+  font-size: 1.2rem; /* Slightly smaller than the headline */
+  color: rgba(255, 255, 255, 0.8); /* Subtle white with transparency */
+  text-align: center; /* Center align under the headline */
+  margin-top: 10px; /* Add spacing below the headline */
+  font-style: italic; /* Add an artistic touch */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
+}
+
+
 /* Filter Section */
 .filter-container {
   text-align: center;

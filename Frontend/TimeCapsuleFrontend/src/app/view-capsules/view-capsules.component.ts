@@ -47,6 +47,8 @@ export class ViewCapsulesComponent implements OnInit {
   error: string | null = null;
   userID: number | null = null;
   expandedCapsuleID: number | null = null;
+  lockedCapsulesCount: number = 0;
+
 
   availableTags: Tag[] = [];
   selectedTags: number[] = [];
@@ -63,22 +65,24 @@ export class ViewCapsulesComponent implements OnInit {
     const user = this.userService.getUser();
     if (user && user.userId) {
       this.userID = user.userId;
-      this.fetchCapsules();
+      this.fetchCapsules(); // Lädt die offenen Kapseln
+      this.fetchLockedCapsules(); // Lädt die geschlossenen Kapseln (nur Zählung)
     } else {
       this.error = 'User not logged in.';
     }
   }
-
+  
+  
   fetchCapsules() {
     this.http.get<Capsule[]>(this.apiUrl).subscribe({
       next: (data) => {
         const today = new Date();
-        this.capsules = data; // Store all capsules, regardless of lockDate
-        this.filteredCapsules = data.filter(
+        this.capsules = data.filter(
           (capsule) =>
-            capsule.recipientID === this.userID &&
-            new Date(capsule.lockDate) <= today // Capsules ready to open
+            capsule.recipientID === this.userID && // Only for the logged-in user
+            new Date(capsule.lockDate) <= today // Lock date must not be in the future
         );
+        this.filteredCapsules = [...this.capsules]; // Initially, no additional filters applied
         this.capsules.forEach((capsule) => this.fetchTagsForCapsule(capsule));
       },
       error: (err) => {
@@ -87,6 +91,9 @@ export class ViewCapsulesComponent implements OnInit {
       },
     });
   }
+  
+  
+  
   
 
   fetchTagsForCapsule(capsule: Capsule) {
@@ -118,13 +125,34 @@ export class ViewCapsulesComponent implements OnInit {
 
   filterCapsules() {
     if (this.selectedTags.length === 0) {
+      // Reset to all capsules ready to open for the logged-in user
       this.filteredCapsules = [...this.capsules];
     } else {
+      // Apply tag filtering
       this.filteredCapsules = this.capsules.filter((capsule) =>
-        capsule.tags?.some((tag) => this.selectedTags.includes(tag.tagID))
+        capsule.tags?.some((tag) => this.selectedTags.includes(tag.tagID)) // Only capsules matching selected tags
       );
     }
   }
+  fetchLockedCapsules() {
+    this.http.get<Capsule[]>(this.apiUrl).subscribe({
+      next: (data) => {
+        const today = new Date();
+  
+        // Nur die geschlossenen Kapseln für den eingeloggten Benutzer zählen
+        this.lockedCapsulesCount = data.filter(
+          (capsule) =>
+            capsule.recipientID === this.userID && // Für den eingeloggten Benutzer
+            new Date(capsule.lockDate) > today // Lockdatum in der Zukunft
+        ).length;
+      },
+      error: (err) => {
+        console.error('Error fetching locked capsules:', err);
+      },
+    });
+  }
+  
+  
 
   toggleCapsuleMessage(capsuleID: number) {
     this.expandedCapsuleID =

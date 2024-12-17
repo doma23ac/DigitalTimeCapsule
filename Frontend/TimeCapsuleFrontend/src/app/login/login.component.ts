@@ -24,13 +24,13 @@ export class LoginComponent {
     const apiUrl = 'http://localhost:5062/api/login';
     const headers = new HttpHeaders().set('Authorization', basicAuthHeader);
 
-    // Store the header in local storage
-    localStorage.setItem('authHeader', basicAuthHeader);
+    
+    
 
     this.http.post<any>(apiUrl, {}, { headers }).subscribe({
       next: (response) => {
         if (response.message === 'Login successful') {
-          // Store user info and navigate to personal page
+          // Store user data for personalisation of the next pages and navigate to personal page
           localStorage.setItem('user', JSON.stringify(response));
           this.router.navigate(['/personal']);
         } else {

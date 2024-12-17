@@ -21,6 +21,7 @@ export class PersonalPageComponent implements OnInit {
   }
 
   logout(): void {
+    //so after logout the local storage is cleared and the user is redirected to the home page
     this.userService.clearUser();
     this.router.navigate(['/']); // Redirect to home
   }

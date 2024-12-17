@@ -91,10 +91,6 @@ export class ViewCapsulesComponent implements OnInit {
       },
     });
   }
-  
-  
-  
-  
 
   fetchTagsForCapsule(capsule: Capsule) {
     const tagsApiUrl = `http://localhost:5062/api/capsuletags/${capsule.capsuleID}`;
@@ -141,11 +137,11 @@ export class ViewCapsulesComponent implements OnInit {
       next: (data) => {
         const today = new Date();
   
-        // Nur die geschlossenen Kapseln für den eingeloggten Benutzer zählen
+        // Just count the capsules that are locked and belong to the logged-in user
         this.lockedCapsulesCount = data.filter(
           (capsule) =>
-            capsule.recipientID === this.userID && // Für den eingeloggten Benutzer
-            new Date(capsule.lockDate) > today // Lockdatum in der Zukunft
+            capsule.recipientID === this.userID && // for the logged-in user
+            new Date(capsule.lockDate) > today // Lock date must be in the future
         ).length;
       },
       error: (err) => {

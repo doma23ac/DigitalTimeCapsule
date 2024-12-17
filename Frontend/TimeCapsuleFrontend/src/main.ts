@@ -7,7 +7,6 @@ import { SignupComponent } from './app/signup/signup.component';
 import { PersonalPageComponent } from './app/personal-page/personal-page.component';
 import { CreateCapsuleComponent } from './app/create-capsule/create-capsule.component';
 import { ViewCapsulesComponent } from './app/view-capsules/view-capsules.component';
-import { CapsuleDetailComponent } from './app/capsule-detail/capsule-detail.component';
 import { ProfileComponent } from './app/profile/profile.component'; // Import the ProfileComponent
 
 bootstrapApplication(AppComponent, {
@@ -19,8 +18,7 @@ bootstrapApplication(AppComponent, {
       { path: 'personal', component: PersonalPageComponent },
       { path: 'create-capsule', component: CreateCapsuleComponent },
       { path: 'view-capsules', component: ViewCapsulesComponent },
-      { path: 'capsule-detail/:id', component: CapsuleDetailComponent },
-      { path: 'profile', component: ProfileComponent }, // Add the profile route
+      { path: 'profile', component: ProfileComponent },
     ], withDebugTracing()),  // Debugging enabled for routing
     provideHttpClient(),  // Provide HTTP client
   ]

@@ -25,7 +25,9 @@ public class CapsuleRepository : BaseRepository
                 Message = reader["Message"]?.ToString() ?? string.Empty,
                 LockDate = reader["LockDate"] is DBNull ? DateTime.MinValue : (DateTime)reader["LockDate"],
                 SenderID = (int)reader["SenderID"],
-                RecipientID = reader["RecipientID"] as int?
+                RecipientID = reader.IsDBNull(reader.GetOrdinal("RecipientID")) ? 0 : reader.GetFieldValue<int>(reader.GetOrdinal("RecipientID")),
+                SenderUsername = reader["SenderUsername"]?.ToString() ?? string.Empty, // Ensure this property is set
+                RecipientUsername = reader["RecipientUsername"]?.ToString() ?? string.Empty // Ensure this property is set
             };
         }
         return null;
@@ -63,8 +65,13 @@ public class CapsuleRepository : BaseRepository
     cmd.Parameters.AddWithValue("@recipientID", (object?)capsule.RecipientID ?? DBNull.Value);
 
     // Retrieve the CapsuleID and set it to the capsule object
-    capsule.CapsuleID = (int)cmd.ExecuteScalar();
+    var result = cmd.ExecuteScalar();
+    if (result == null || result == DBNull.Value)
+    {
+        throw new Exception("Failed to insert the capsule and retrieve CapsuleID.");
+    }
 
+    capsule.CapsuleID = Convert.ToInt32(result); // Safe conversion
     return true;
 }
 
@@ -136,11 +143,10 @@ public class CapsuleRepository : BaseRepository
             Title = reader.GetString(reader.GetOrdinal("Title")),
             Message = reader.GetString(reader.GetOrdinal("Message")),
             LockDate = reader.GetDateTime(reader.GetOrdinal("LockDate")),
-            RecipientID = reader.IsDBNull(reader.GetOrdinal("RecipientID")) 
-                ? (int?)null 
-                : reader.GetInt32(reader.GetOrdinal("RecipientID")),
-            SenderID = reader.GetInt32(reader.GetOrdinal("SenderId")),
-            SenderUsername = reader.GetString(reader.GetOrdinal("SenderUsername"))
+            RecipientID = reader.IsDBNull(reader.GetOrdinal("RecipientID")) ? 0 : reader.GetInt32(reader.GetOrdinal("RecipientID")),
+            SenderID = reader.GetInt32(reader.GetOrdinal("SenderID")),
+            SenderUsername = reader.GetString(reader.GetOrdinal("SenderUsername")),
+            RecipientUsername = reader.IsDBNull(reader.GetOrdinal("RecipientUsername")) ? string.Empty : reader.GetString(reader.GetOrdinal("RecipientUsername"))
         };
         capsules.Add(capsule);
     }

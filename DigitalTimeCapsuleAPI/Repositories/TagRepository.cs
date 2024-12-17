@@ -4,7 +4,7 @@ public class TagRepository : BaseRepository
 {
     public TagRepository(IConfiguration configuration) : base(configuration) { }
 
-    public Tag GetTagById(int id)
+    public Tag? GetTagById(int id)
     {
         using var conn = new NpgsqlConnection(ConnectionString);
         var cmd = conn.CreateCommand();
@@ -17,7 +17,7 @@ public class TagRepository : BaseRepository
             return new Tag
             {
                 TagID = (int)reader["TagID"],
-                TagName = reader["TagName"].ToString()
+                TagName = reader["TagName"]!.ToString() ?? string.Empty,// Non-nullable value type
             };
         }
         return null;
@@ -36,7 +36,7 @@ public class TagRepository : BaseRepository
             tags.Add(new Tag
             {
                 TagID = (int)reader["TagID"],
-                TagName = reader["TagName"].ToString()
+                TagName = reader["TagName"]!.ToString() ?? string.Empty, // Non-nullable value type
             });
         }
         return tags;
@@ -60,7 +60,7 @@ public class TagRepository : BaseRepository
             tags.Add(new Tag
             {
                 TagID = (int)reader["TagID"],
-                TagName = reader["TagName"].ToString()
+                TagName = reader["TagName"].ToString() ?? string.Empty,
             });
         }
         return tags;

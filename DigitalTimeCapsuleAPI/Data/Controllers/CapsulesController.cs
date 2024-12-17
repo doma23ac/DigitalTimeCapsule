@@ -70,28 +70,7 @@ public class CapsulesController : ControllerBase
         return Ok(capsules);
     }
 
-    [HttpPut("{id}")]
-    public IActionResult UpdateCapsule(int id, [FromBody] Capsule capsule)
-    {
-        if (id != capsule.CapsuleID)
-        {
-            return BadRequest("Capsule ID mismatch.");
-        }
-
-        var existingCapsule = _capsuleRepository.GetCapsuleById(id);
-        if (existingCapsule == null)
-        {
-            return NotFound($"Capsule with ID {id} not found.");
-        }
-
-        bool result = _capsuleRepository.UpdateCapsule(capsule);
-        if (result)
-        {
-            return NoContent();
-        }
-
-        return BadRequest("Failed to update capsule.");
-    }
+   
 
     [HttpDelete("{id}")]
     public IActionResult DeleteCapsule(int id)

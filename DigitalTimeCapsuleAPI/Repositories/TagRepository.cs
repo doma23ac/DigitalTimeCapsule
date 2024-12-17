@@ -76,27 +76,6 @@ public class TagRepository : BaseRepository
         return ExecuteCommand(conn, cmd);
     }
 
-    public bool UpdateTag(Tag tag)
-    {
-        using var conn = new NpgsqlConnection(ConnectionString);
-        var cmd = conn.CreateCommand();
-        cmd.CommandText = "UPDATE Tags SET TagName = @tagName WHERE TagID = @tagID";
-        cmd.Parameters.AddWithValue("@tagName", tag.TagName);
-        cmd.Parameters.AddWithValue("@tagID", tag.TagID);
-
-        return ExecuteCommand(conn, cmd);
-    }
-
-    public bool DeleteTag(int id)
-    {
-        using var conn = new NpgsqlConnection(ConnectionString);
-        var cmd = conn.CreateCommand();
-        cmd.CommandText = "DELETE FROM Tags WHERE TagID = @id";
-        cmd.Parameters.AddWithValue("@id", id);
-
-        return ExecuteCommand(conn, cmd);
-    }
-
     public bool AddTagToCapsule(int capsuleId, int tagId)
     {
         using var conn = new NpgsqlConnection(ConnectionString);
@@ -108,15 +87,5 @@ public class TagRepository : BaseRepository
         return ExecuteCommand(conn, cmd);
     }
 
-    public bool RemoveTagFromCapsule(int capsuleId, int tagId)
-    {
-        using var conn = new NpgsqlConnection(ConnectionString);
-        var cmd = conn.CreateCommand();
-        cmd.CommandText = "DELETE FROM CapsuleTags WHERE CapsuleID = @capsuleId AND TagID = @tagId";
-        cmd.Parameters.AddWithValue("@capsuleId", capsuleId);
-        cmd.Parameters.AddWithValue("@tagId", tagId);
-
-        return ExecuteCommand(conn, cmd);
-    }
 }
 

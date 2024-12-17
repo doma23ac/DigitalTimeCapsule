@@ -38,53 +38,108 @@
 
 
 /* Filter Section */
+/* Tags Container */
+/* Black Transparent Container */
 .filter-container {
   text-align: center;
   padding: 20px;
   margin: 20px auto;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.6); /* Transparent black */
   border-radius: 8px;
-  width: 80%; /* Adaptable width */
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.filter-header {
+/* Header */
+.filter-header, .tags-label {
   font-size: 1.5rem;
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 10px;
 }
 
+/* Tags Container */
 .tags-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 10px;
   justify-content: center;
 }
 
+/* Checkbox Wrapper */
 .tag-checkbox {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: white;
-}
-
-.tag-label {
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1); /* Light box background */
+  border-radius: 5px;
+  padding: 5px 10px;
   font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  user-select: none;
 }
 
-/* Capsules Container */
+/* Hide Native Checkbox */
+/* Verstecke die native Checkbox */
+.checkbox-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 0;
+  height: 0;
+  position: absolute;
+  opacity: 0;
+}
+
+/* Custom Checkbox-Styling */
+.custom-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid white; /* Weißer Rand */
+  border-radius: 3px; /* Abgerundete Ecken */
+  display: inline-block;
+  position: relative;
+  background-color: transparent; /* Kein Hintergrund */
+}
+
+/* Weißer Haken bei Checked-Zustand */
+.checkbox-input:checked + .custom-checkbox::after {
+  content: "";
+  position: absolute;
+  top: 2px; /* Justierung für vertikale Position */
+  left: 5px; /* Justierung für horizontale Position */
+  width: 4px;
+  height: 8px;
+  border: solid white; /* Weißer Haken */
+  border-width: 0 2px 2px 0; /* Form des Hakens */
+  transform: rotate(45deg); /* Schräger Haken */
+}
+
+
+
+
+
 .capsules-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 1100px; /* Allow overriding width */
+  width: 1200px; /* Fixed width overriding restrictions */
+  max-width: none; /* Allow it to exceed parent width */
   margin: 0 auto;
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative; /* Ensure it doesn’t overlap */
-  z-index: 1; /* Keep capsules below the "Go Back" button */
+  box-sizing: border-box;
+
+  /* Scrolling for content */
+  max-height: 450px; /* Leave space for the "Go Back" button */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
+
+
 
 /* Capsule Item */
 .capsule-item {
@@ -135,7 +190,14 @@
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 0.9rem;
+
+  display: inline-flex; /* Ensures content aligns inline with a flex container */
+  align-items: center;  /* Centers content vertically within the box */
+  justify-content: center; /* Aligns content horizontally if needed */
+  gap: 5px; /* Adds space between checkbox and text if applicable */
+  line-height: 1; /* Prevents additional spacing issues */
 }
+
 
 /* Capsule Subtitle */
 .capsule-subtitle {

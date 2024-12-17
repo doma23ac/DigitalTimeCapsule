@@ -20,15 +20,19 @@
 <div class="filter-container">
   <h2 class="filter-header">Filter by Tags</h2>
   <div class="tags-container">
-    <mat-checkbox
-      *ngFor="let tag of availableTags"
-      class="tag-checkbox"
-      [checked]="selectedTags.includes(tag.tagID)"
-      (change)="onTagCheckboxChange(tag.tagID, $event)">
+    <label *ngFor="let tag of availableTags" class="tag-checkbox">
+      <input 
+        type="checkbox"
+        [checked]="selectedTags.includes(tag.tagID)"
+        (change)="onTagCheckboxChange(tag.tagID, $event)"
+        class="checkbox-input"
+      />
+      <span class="custom-checkbox"></span>
       <span class="tag-label">{{ tag.tagName }}</span>
-    </mat-checkbox>
+    </label>
   </div>
 </div>
+  
 
 <!-- Capsules Section -->
 <div class="capsules-container">
@@ -80,16 +84,18 @@
   </div>
 
   <!-- Go Back Button -->
-  <div class="back-button-container">
-    <button
-      mat-raised-button
-      color="warn"
-      type="button"
-      class="go-back-button"
-      (click)="goBack()">
-      Go Back
-    </button>
-  </div>
   
   
+  
+</div>
+ <!-- Go Back Button -->
+<div class="back-button-container">
+  <button
+    mat-raised-button
+    color="warn"
+    type="button"
+    class="go-back-button"
+    (click)="goBack()">
+    Go Back
+  </button>
 </div>

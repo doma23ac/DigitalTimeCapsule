@@ -114,14 +114,16 @@ export class ViewCapsulesComponent implements OnInit {
     });
   }
 
-  onTagCheckboxChange(tagID: number, event: MatCheckboxChange) {
-    if (event.checked) {
+  onTagCheckboxChange(tagID: number, event: Event): void {
+    const checkbox = event.target as HTMLInputElement; // Cast event.target to HTMLInputElement
+    if (checkbox.checked) {
       this.selectedTags.push(tagID);
     } else {
       this.selectedTags = this.selectedTags.filter((id) => id !== tagID);
     }
     this.filterCapsules();
   }
+  
 
   filterCapsules() {
     if (this.selectedTags.length === 0) {

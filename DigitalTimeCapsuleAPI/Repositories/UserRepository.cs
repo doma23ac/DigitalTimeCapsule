@@ -162,16 +162,16 @@ public class UserRepository : BaseRepository
             deleteCapsuleTagsCmd.Transaction = transaction;
             deleteCapsuleTagsCmd.ExecuteNonQuery();
         }
-         using (var updateRecipientCapsulesCmd = conn.CreateCommand())
-        {
-            updateRecipientCapsulesCmd.CommandText = @"
-                UPDATE ""Capsules""
-                SET ""RecipientID"" = NULL
-                WHERE ""RecipientID"" = @userId";
-            updateRecipientCapsulesCmd.Parameters.AddWithValue("@userId", userId);
-            updateRecipientCapsulesCmd.Transaction = transaction;
-            updateRecipientCapsulesCmd.ExecuteNonQuery();
-        }
+        using (var deleteRecipientCapsulesCmd = conn.CreateCommand())
+{
+    deleteRecipientCapsulesCmd.CommandText = @"
+        DELETE FROM ""Capsules""
+        WHERE ""RecipientID"" = @userId";
+    deleteRecipientCapsulesCmd.Parameters.AddWithValue("@userId", userId);
+    deleteRecipientCapsulesCmd.Transaction = transaction;
+    deleteRecipientCapsulesCmd.ExecuteNonQuery();
+}
+
 
         // Step 2: Delete rows in Capsules associated with the user
         using (var deleteCapsulesCmd = conn.CreateCommand())

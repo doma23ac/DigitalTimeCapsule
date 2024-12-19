@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing'; // Import HttpClientTestingModule
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Import BrowserAnimationsModule
 import { CreateCapsuleComponent } from './create-capsule.component';
 
 describe('CreateCapsuleComponent', () => {
@@ -8,7 +9,11 @@ describe('CreateCapsuleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreateCapsuleComponent]
+      imports: [
+        HttpClientTestingModule, // Add HttpClientTestingModule
+        BrowserAnimationsModule, // Add BrowserAnimationsModule
+        CreateCapsuleComponent
+      ]
     })
     .compileComponents();
     

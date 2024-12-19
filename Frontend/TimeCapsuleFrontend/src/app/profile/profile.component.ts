@@ -55,7 +55,7 @@ export class ProfileComponent implements OnInit {
     this.errorMessage = null;
 
     if (!this.validateEmail(this.user.email)) {
-      this.errorMessage = 'Invalid email address.';
+      this.errorMessage = 'Failed to update profile. Please try again.';
       return;
     }
 

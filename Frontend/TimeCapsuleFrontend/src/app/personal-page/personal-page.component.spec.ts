@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing'; // Import HttpClientTestingModule
 import { PersonalPageComponent } from './personal-page.component';
 
 describe('PersonalPageComponent', () => {
@@ -8,7 +8,10 @@ describe('PersonalPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PersonalPageComponent]
+      imports: [
+        HttpClientTestingModule, // Include HttpClientTestingModule
+        PersonalPageComponent
+      ]
     })
     .compileComponents();
     

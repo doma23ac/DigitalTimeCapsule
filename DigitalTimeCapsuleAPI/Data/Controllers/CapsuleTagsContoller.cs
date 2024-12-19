@@ -30,5 +30,34 @@ public class CapsuleTagsController : ControllerBase
         }
         return Ok(tags);
     }
+ // POST: api/CapsuleTags/{capsuleId}/{tagId}
+    [HttpPost("{capsuleId}/{tagId}")]
+    public IActionResult AddTagToCapsule(int capsuleId, int tagId)
+    {
+        // Validate that the capsule exists
+        var capsule = _capsuleRepository.GetCapsuleById(capsuleId);
+        if (capsule == null)
+        {
+            return NotFound($"Capsule with ID {capsuleId} not found.");
+        }
+
+        // Validate that the tag exists
+        var tag = _tagRepository.GetTagById(tagId);
+        if (tag == null)
+        {
+            return NotFound($"Tag with ID {tagId} not found.");
+        }
+
+        // Add the tag to the capsule
+        var result = _capsuleTagRepository.AddTagToCapsule(capsuleId, tagId);
+        if (!result)
+        {
+            return BadRequest("Failed to add the tag to the capsule.");
+        }
+
+        return Ok($"Tag with ID {tagId} successfully added to Capsule with ID {capsuleId}.");
+    }
+
+
 
 }

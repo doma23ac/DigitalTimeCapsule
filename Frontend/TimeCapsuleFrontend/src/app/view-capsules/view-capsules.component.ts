@@ -1,31 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { CapsuleService, Capsule, Tag } from '../capsule.service';
 import { UserService } from '../user.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatCheckboxModule, MatCheckboxChange } from '@angular/material/checkbox';
-import { Router } from '@angular/router'; // Import Router
-
-export interface Capsule {
-  capsuleID: number;
-  title: string;
-  message: string;
-  lockDate: string;
-  status: string;
-  senderID: number;
-  recipientID: number | null;
-  senderUsername?: string;
-  recipientUsername?: string;
-  tags?: Tag[];
-}
-
-export interface Tag {
-  tagID: number;
-  tagName: string;
-}
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-view-capsules',
@@ -44,45 +26,40 @@ export interface Tag {
 export class ViewCapsulesComponent implements OnInit {
   capsules: Capsule[] = [];
   filteredCapsules: Capsule[] = [];
+  availableTags: Tag[] = [];
+  selectedTags: number[] = [];
   error: string | null = null;
   userID: number | null = null;
   expandedCapsuleID: number | null = null;
   lockedCapsulesCount: number = 0;
 
-
-  availableTags: Tag[] = [];
-  selectedTags: number[] = [];
-
-  private apiUrl = 'http://localhost:5062/api/capsules';
-
   constructor(
-    private http: HttpClient,
+    private capsuleService: CapsuleService,
     private userService: UserService,
-    private router: Router // Inject Router
+    private router: Router
   ) {}
 
   ngOnInit() {
     const user = this.userService.getUser();
     if (user && user.userId) {
       this.userID = user.userId;
-      this.fetchCapsules(); // Lädt die offenen Kapseln
-      this.fetchLockedCapsules(); // Lädt die geschlossenen Kapseln (nur Zählung)
+      this.fetchCapsules();
+      this.fetchLockedCapsules();
     } else {
       this.error = 'User not logged in.';
     }
   }
-  
-  
+
   fetchCapsules() {
-    this.http.get<Capsule[]>(this.apiUrl).subscribe({
-      next: (data) => {
+    this.capsuleService.getCapsules().subscribe({
+      next: (capsules) => {
         const today = new Date();
-        this.capsules = data.filter(
+        this.capsules = capsules.filter(
           (capsule) =>
-            capsule.recipientID === this.userID && // Only for the logged-in user
-            new Date(capsule.lockDate) <= today // Lock date must not be in the future
+            capsule.recipientID === this.userID &&
+            new Date(capsule.lockDate) <= today
         );
-        this.filteredCapsules = [...this.capsules]; // Initially, no additional filters applied
+        this.filteredCapsules = [...this.capsules];
         this.capsules.forEach((capsule) => this.fetchTagsForCapsule(capsule));
       },
       error: (err) => {
@@ -93,8 +70,7 @@ export class ViewCapsulesComponent implements OnInit {
   }
 
   fetchTagsForCapsule(capsule: Capsule) {
-    const tagsApiUrl = `http://localhost:5062/api/capsuletags/${capsule.capsuleID}`;
-    this.http.get<Tag[]>(tagsApiUrl).subscribe({
+    this.capsuleService.getTagsForCapsule(capsule.capsuleID).subscribe({
       next: (tags) => {
         capsule.tags = tags;
         tags.forEach((tag) => {
@@ -110,38 +86,14 @@ export class ViewCapsulesComponent implements OnInit {
     });
   }
 
-  onTagCheckboxChange(tagID: number, event: Event): void {
-    const checkbox = event.target as HTMLInputElement; // Cast event.target to HTMLInputElement
-    if (checkbox.checked) {
-      this.selectedTags.push(tagID);
-    } else {
-      this.selectedTags = this.selectedTags.filter((id) => id !== tagID);
-    }
-    this.filterCapsules();
-  }
-  
-
-  filterCapsules() {
-    if (this.selectedTags.length === 0) {
-      // Reset to all capsules ready to open for the logged-in user
-      this.filteredCapsules = [...this.capsules];
-    } else {
-      // Apply tag filtering
-      this.filteredCapsules = this.capsules.filter((capsule) =>
-        capsule.tags?.some((tag) => this.selectedTags.includes(tag.tagID)) // Only capsules matching selected tags
-      );
-    }
-  }
   fetchLockedCapsules() {
-    this.http.get<Capsule[]>(this.apiUrl).subscribe({
-      next: (data) => {
+    this.capsuleService.getCapsules().subscribe({
+      next: (capsules) => {
         const today = new Date();
-  
-        // Just count the capsules that are locked and belong to the logged-in user
-        this.lockedCapsulesCount = data.filter(
+        this.lockedCapsulesCount = capsules.filter(
           (capsule) =>
-            capsule.recipientID === this.userID && // for the logged-in user
-            new Date(capsule.lockDate) > today // Lock date must be in the future
+            capsule.recipientID === this.userID &&
+            new Date(capsule.lockDate) > today
         ).length;
       },
       error: (err) => {
@@ -149,8 +101,26 @@ export class ViewCapsulesComponent implements OnInit {
       },
     });
   }
-  
-  
+
+  onTagCheckboxChange(tagID: number, event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.selectedTags.push(tagID);
+    } else {
+      this.selectedTags = this.selectedTags.filter((id) => id !== tagID);
+    }
+    this.filterCapsules();
+  }
+
+  filterCapsules() {
+    if (this.selectedTags.length === 0) {
+      this.filteredCapsules = [...this.capsules];
+    } else {
+      this.filteredCapsules = this.capsules.filter((capsule) =>
+        capsule.tags?.some((tag) => this.selectedTags.includes(tag.tagID))
+      );
+    }
+  }
 
   toggleCapsuleMessage(capsuleID: number) {
     this.expandedCapsuleID =
@@ -163,7 +133,7 @@ export class ViewCapsulesComponent implements OnInit {
     );
 
     if (confirmDelete) {
-      this.http.delete(`${this.apiUrl}/${capsuleID}`).subscribe({
+      this.capsuleService.deleteCapsule(capsuleID).subscribe({
         next: () => {
           alert('Capsule deleted successfully.');
           this.capsules = this.capsules.filter(
@@ -182,11 +152,8 @@ export class ViewCapsulesComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/personal']); // Route to '/personal'
+    this.router.navigate(['/personal']);
   }
-  getLockedCapsulesCount(): number {
-    const today = new Date();
-    return this.capsules.filter((capsule) => new Date(capsule.lockDate) > today).length;
-  }
-  
 }
+
+

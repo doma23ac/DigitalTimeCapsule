@@ -13,6 +13,7 @@ describe('ProfileComponent', () => {
   let mockRouter: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
+    // Mock UserService and Router
     mockUserService = jasmine.createSpyObj('UserService', ['getUser', 'setUser', 'clearUser']);
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
 
@@ -20,21 +21,25 @@ describe('ProfileComponent', () => {
       imports: [
         HttpClientTestingModule,
         BrowserAnimationsModule,
-        ProfileComponent
+        ProfileComponent // Import the component being tested
       ],
       providers: [
         { provide: UserService, useValue: mockUserService },
         { provide: Router, useValue: mockRouter }
       ]
-    })
-    .compileComponents();
+    }).compileComponents();
+
+    // Set up a default valid user before creating the component
+    mockUserService.getUser.and.returnValue({ username: 'testuser', email: 'test@example.com', userId: 1 });
 
     fixture = TestBed.createComponent(ProfileComponent);
     component = fixture.componentInstance;
+
+    // Detect changes after mock setup
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
@@ -54,7 +59,7 @@ describe('ProfileComponent', () => {
 
       component.ngOnInit();
 
-      expect(component.errorMessage).toContain('No user is logged in');
+      expect(component.errorMessage).toBe('No user is logged in. Redirecting to login.');
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
     });
   });
@@ -62,17 +67,24 @@ describe('ProfileComponent', () => {
   describe('onUpdate', () => {
     it('should show error for invalid email', () => {
       component.user.email = 'invalidemail';
+      component.password = ''; // Ensure no other error path is triggered
+
       component.onUpdate();
 
       expect(component.errorMessage).toBe('Invalid email address.');
+      expect(component.successMessage).toBeNull(); // Ensure no success message
     });
 
     it('should show error for invalid password', () => {
       component.user.email = 'valid@example.com';
-      component.password = 'short';
+      component.password = 'short'; // Invalid password
+
       component.onUpdate();
 
-      expect(component.errorMessage).toContain('Password must contain at least one uppercase');
+      expect(component.errorMessage).toBe(
+        'Password must contain at least one uppercase letter, one special character, and be 6-12 characters long.'
+      );
+      expect(component.successMessage).toBeNull();
     });
 
     it('should update profile successfully', () => {
@@ -89,6 +101,7 @@ describe('ProfileComponent', () => {
         username: mockUser.username,
         email: mockUser.email
       });
+      expect(component.errorMessage).toBeNull();
     });
 
     it('should handle error during profile update', () => {
@@ -97,12 +110,13 @@ describe('ProfileComponent', () => {
       component.onUpdate();
 
       expect(component.errorMessage).toBe('Failed to update profile. Please try again.');
+      expect(component.successMessage).toBeNull();
     });
   });
 
   describe('onDelete', () => {
     it('should confirm and delete account successfully', () => {
-      spyOn(window, 'confirm').and.returnValue(true);
+      spyOn(window, 'confirm').and.returnValue(true); // Mock confirmation
       spyOn(component['http'], 'delete').and.returnValue(of({}));
 
       component.onDelete();
@@ -110,23 +124,27 @@ describe('ProfileComponent', () => {
       expect(component.successMessage).toBe('Your account has been deleted.');
       expect(mockUserService.clearUser).toHaveBeenCalled();
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+      expect(component.errorMessage).toBeNull();
     });
 
     it('should handle error during account deletion', () => {
-      spyOn(window, 'confirm').and.returnValue(true);
+      spyOn(window, 'confirm').and.returnValue(true); // Mock confirmation
       spyOn(component['http'], 'delete').and.returnValue(throwError(() => new Error()));
 
       component.onDelete();
 
       expect(component.errorMessage).toBe('Failed to delete your account. Please try again.');
+      expect(component.successMessage).toBeNull();
     });
 
     it('should not delete account if user cancels', () => {
-      spyOn(window, 'confirm').and.returnValue(false);
+      spyOn(window, 'confirm').and.returnValue(false); // Mock user cancellation
 
       component.onDelete();
 
       expect(mockUserService.clearUser).not.toHaveBeenCalled();
+      expect(component.successMessage).toBeNull();
+      expect(component.errorMessage).toBeNull();
     });
   });
 

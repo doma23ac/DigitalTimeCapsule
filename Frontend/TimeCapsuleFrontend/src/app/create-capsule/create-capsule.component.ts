@@ -6,8 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { CapsuleService, Tag } from '../capsule.service';
-import { UserService } from '../user.service';
+import { CapsuleService, Tag } from '../services/capsule.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-create-capsule',

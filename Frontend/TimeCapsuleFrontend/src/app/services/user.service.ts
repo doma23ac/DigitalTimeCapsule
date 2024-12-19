@@ -80,17 +80,6 @@ export class UserService {
     return this.http.post(url, capsule, { headers: this.getAuthHeaders() });
   }
 
-  // Fetch all available tags
-  getTags(): Observable<any> {
-    const url = `${this.baseUrl}/tags`;
-    return this.http.get(url, { headers: this.getAuthHeaders() });
-  }
-
-  // Add a tag to a capsule
-  addTagToCapsule(capsuleID: number, tagID: number): Observable<any> {
-    const url = `${this.baseUrl}/capsuletags/${capsuleID}/${tagID}`;
-    return this.http.post(url, {}, { headers: this.getAuthHeaders() });
-  }
 
   // Example: Validate User Login (Check credentials on the backend)
   validateUser(username: string, password: string): Observable<any> {

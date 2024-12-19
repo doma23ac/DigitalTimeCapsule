@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 
 // Import Material modules
 import { MatFormFieldModule } from '@angular/material/form-field';

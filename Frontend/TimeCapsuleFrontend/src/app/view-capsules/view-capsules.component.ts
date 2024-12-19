@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CapsuleService, Capsule, Tag } from '../capsule.service';
-import { UserService } from '../user.service';
+import { CapsuleService, Capsule, Tag } from '../services/capsule.service';
+import { UserService } from '../services/user.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';

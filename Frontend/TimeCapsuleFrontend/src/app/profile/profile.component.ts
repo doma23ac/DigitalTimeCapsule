@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 
@@ -16,9 +15,9 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule,
     FormsModule,
-    MatFormFieldModule, // Import MatFormFieldModule
-    MatInputModule,     // Import MatInputModule
-    MatButtonModule     // Import MatButtonModule
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
@@ -26,13 +25,11 @@ import { MatButtonModule } from '@angular/material/button';
 export class ProfileComponent implements OnInit {
   user: any = { username: '', email: '' };
   password: string = '';
-  private apiUrl = 'http://localhost:5062/api/Users';
   successMessage: string | null = null;
   errorMessage: string | null = null;
 
   constructor(
     private userService: UserService,
-    private http: HttpClient,
     private router: Router
   ) {}
 
@@ -72,7 +69,7 @@ export class ProfileComponent implements OnInit {
       password: this.password || undefined
     };
 
-    this.http.put(`${this.apiUrl}/${this.user.userId}`, updatePayload).subscribe({
+    this.userService.updateUser(this.user.userId, updatePayload).subscribe({
       next: () => {
         this.successMessage = 'Your profile has been updated successfully.';
         this.userService.setUser({
@@ -93,7 +90,7 @@ export class ProfileComponent implements OnInit {
     );
 
     if (confirmDelete) {
-      this.http.delete(`${this.apiUrl}/${this.user.userId}`).subscribe({
+      this.userService.deleteUser(this.user.userId).subscribe({
         next: () => {
           this.successMessage = 'Your account has been deleted.';
           this.userService.clearUser();

@@ -68,6 +68,18 @@ export class UserService {
 
   // **7. Backend API Calls**
 
+  // Update user profile
+  updateUser(userId: string, payload: any): Observable<any> {
+    const url = `${this.baseUrl}/users/${userId}`;
+    return this.http.put(url, payload, { headers: this.getAuthHeaders() });
+  }
+
+  // Delete user account
+  deleteUser(userId: string): Observable<any> {
+    const url = `${this.baseUrl}/users/${userId}`;
+    return this.http.delete(url, { headers: this.getAuthHeaders() });
+  }
+
   // Retrieve user by username
   getUserByUsername(username: string): Observable<any> {
     const url = `${this.baseUrl}/users/by-username/${username}`;
@@ -80,8 +92,7 @@ export class UserService {
     return this.http.post(url, capsule, { headers: this.getAuthHeaders() });
   }
 
-
-  // Example: Validate User Login (Check credentials on the backend)
+  // Validate User Login
   validateUser(username: string, password: string): Observable<any> {
     const url = `${this.baseUrl}/login`;
     const headers = new HttpHeaders({

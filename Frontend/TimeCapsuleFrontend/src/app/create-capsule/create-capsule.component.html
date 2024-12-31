@@ -15,8 +15,7 @@
 <div class="login-form">
   <form (ngSubmit)="onSubmit()" #capsuleForm="ngForm">
     <!-- Title -->
-    <mat-form-field class="input-field" floatLabel="always">
-      <mat-label>Title</mat-label>
+    <mat-form-field class="input-field">
       <input
         matInput
         id="title"
@@ -27,8 +26,7 @@
     </mat-form-field>
 
     <!-- Message -->
-    <mat-form-field class="input-field" floatLabel="always">
-      <mat-label>Your Message</mat-label>
+    <mat-form-field class="input-field">
       <textarea
         matInput
         id="message"
@@ -40,24 +38,21 @@
     </mat-form-field>
 
     <!-- Date to Open -->
-   <!-- Date to Open -->
-<mat-form-field class="input-field" floatLabel="always">
-  <mat-label>Date to Open</mat-label>
-  <input
-    matInput
-    type="date"
-    id="lockDate"
-    [(ngModel)]="capsule.lockDate"
-    name="lockDate"
-    [min]="minDate" 
-    required
-  />
-</mat-form-field>
-
+    <mat-form-field class="input-field">
+      <input
+        matInput
+        type="date"
+        id="lockDate"
+        [(ngModel)]="capsule.lockDate"
+        name="lockDate"
+        [min]="minDate" 
+        required
+        placeholder="Select a date"
+      />
+    </mat-form-field>
 
     <!-- Recipient -->
-    <mat-form-field class="input-field" floatLabel="always">
-      <mat-label>Receiver</mat-label>
+    <mat-form-field class="input-field">
       <input
         matInput
         id="recipientUsername"

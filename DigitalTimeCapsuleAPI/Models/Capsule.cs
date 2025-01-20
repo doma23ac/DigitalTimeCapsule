@@ -8,9 +8,9 @@ public class Capsule
     public DateTime LockDate { get; set; }
     
     public int SenderID { get; set; }
-    public int RecipientID { get; set; } // Make this nullable if it can be null in the database
+    public int RecipientID { get; set; } 
 
-    // Transient properties for username resolution
+    
     public required string SenderUsername { get; set; }
     public required string RecipientUsername { get; set; }
 }

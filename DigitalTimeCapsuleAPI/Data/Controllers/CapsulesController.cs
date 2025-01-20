@@ -29,7 +29,7 @@ public class CapsulesController : ControllerBase
         }
         capsule.SenderID = sender.UserID;
 
-        // Resolve RecipientID (optional)
+        // Resolve RecipientID 
         if (!string.IsNullOrEmpty(capsule.RecipientUsername))
         {
             var recipient = _userRepository.GetUserByUsername(capsule.RecipientUsername);

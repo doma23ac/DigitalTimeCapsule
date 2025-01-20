@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-
+//not in Use anymore, can be ignored
 public class DigitalTimeCapsuleContext : DbContext
 {
     public DigitalTimeCapsuleContext(DbContextOptions<DigitalTimeCapsuleContext> options)
